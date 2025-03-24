@@ -2,21 +2,22 @@ import React from 'react';
 import './Sidebar.css';
 
 const Sidebar = ({ activeTab, onTabChange }) => {
+  console.log('activeTab', activeTab)
   return (
     <aside className="sidebar">
       <div className="tabs">
-        <button
+        <div
           className={`tab ${activeTab === 'bundles' ? 'active' : ''}`}
           onClick={() => onTabChange('bundles')}
         >
           Bundle Listing
-        </button>
-        <button
+        </div>
+        <div
           className={`tab ${activeTab === 'groups' ? 'active' : ''}`}
           onClick={() => onTabChange('groups')}
         >
           Groups
-        </button>
+        </div>
       </div>
     </aside>
   );

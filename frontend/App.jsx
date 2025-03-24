@@ -2,16 +2,15 @@ import React from 'react';
 
 import { store } from './store';
 import { Home } from './pages/Home';
-import { useParams } from 'react-router-dom';
 import { Provider } from 'react-redux';
+import "./pages/style/variable.css";
 
 function App() {
-  const { company_id } = useParams();
 
   return (
     <Provider store={store}>
       <div className="root">
-        <Home companyId={company_id} />
+        <Home />
       </div>
     </Provider>
   );

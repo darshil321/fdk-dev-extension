@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Input } from 'paul-fds-ui';
 import { Icons } from 'paul-icons-react';
-import { useGetGroupsQuery } from '../../store/services/dynamicBundleApi';
+
 import './GroupSelector.css';
+import { useGetGroupsQuery } from '@/store/services/bundles';
 
 const GroupSelector = ({ onGroupSelect, companyId, applicationId, selectedGroups = [] }) => {
   const [isOpen, setIsOpen] = useState(false);

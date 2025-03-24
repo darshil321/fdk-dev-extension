@@ -1,28 +1,24 @@
-import React from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import CreateBundle from './CreateBundle/CreateBundle';
-import BundlesList from './BundlesList/BundlesList';
-import './DynamicBundle.css';
 
+import { setIsCreating } from "@/store/slices/bundlesSlice";
+import { useDispatch, useSelector } from "react-redux";
+import BundlesList from "./BundleList/BundleList";
+import CreateBundle from "./CreateBundle/CreateBundle";
+import "./DynamicBundle.css";
+import EmptyState from "./EmptyState/EmptyState";
+import { useGetBundlesQuery } from "@/store/services/bundles";
 
-import { useGetBundlesQuery } from '@/store/services/bundles';
-import { setIsCreating } from '@/store/slices/bundlesSlice';
-import EmptyState from './EmptyState/EmptyState';
-
-const DynamicBundle = ({ companyId, applicationId }) => {
+const DynamicBundle = ({ companyId }) => {
   const dispatch = useDispatch();
-  const { isCreating } = useSelector(state => state.bundles);
-  const filters = useSelector(state => state.bundles.filters);
+  const { isCreating } = useSelector((state) => state.bundles);
+  const filters = useSelector((state) => state.bundles.filters);
 
-  // Fetch bundles with current filters
   const { data: bundlesData, isLoading } = useGetBundlesQuery({
     companyId,
-    applicationId,
     params: {
       name: filters.search,
-      status: filters.status !== 'all' ? filters.status : undefined,
-      sort_by: filters.sortBy
-    }
+      status: filters.status !== "all" ? filters.status : undefined,
+      sort_by: filters.sortBy,
+    },
   });
 
   const bundles = bundlesData?.items || [];
@@ -46,8 +42,6 @@ const DynamicBundle = ({ companyId, applicationId }) => {
   // Show create bundle form or bundles list
   return isCreating ? (
     <CreateBundle
-      companyId={companyId}
-      applicationId={applicationId}
       onClose={() => dispatch(setIsCreating(false))}
     />
   ) : (

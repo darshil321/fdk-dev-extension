@@ -9,7 +9,7 @@ import Layout from "./components/Layouts/Layout";
 
 const EXAMPLE_MAIN_URL = window.location.origin;
 
-export const Home = ({ companyId })  => {
+export const Home = ()  => {
   const [pageLoading, setPageLoading] = useState(false);
   const [productList, setProductList] = useState([]);
   const DOC_URL_PATH = "/help/docs/sdk/latest/platform/company/catalog/#getProducts";

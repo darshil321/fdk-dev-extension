@@ -2,16 +2,17 @@
 
 .create-bundle-container {
     width: 100%;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px;
 }
 
 .bundle-header {
+    position: sticky;
+    top: 0;
+    background: #fff;
+    z-index: 10;
+    padding: 16px 24px;
+    border-bottom: 1px solid var(--border-color);
     display: flex;
     justify-content: space-between;
-    align-items: center;
-    margin-bottom: 24px;
 }
 
 .header-left {
@@ -44,9 +45,14 @@
 
 .card-subtitle {
     font-size: 14px;
-    color: #666;
-    margin-top: -12px;
-    margin-bottom: 16px;
+    color: var(--text-secondary);
+    margin: 16px 0;
+}
+
+.form-full-w-grid {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    gap: 12px;
 }
 
 .form-grid {
@@ -79,26 +85,45 @@
     font-weight: 500;
 }
 
-.component-header {
+.group-table table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.group-table th,
+.group-table td {
+    padding: 12px 16px;
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.group-table th {
+    background-color: var(--background-light);
+    font-weight: 500;
+    font-size: 14px;
+}
+
+.group-table td {
+    font-size: 14px;
+}
+
+.input-field {
+   margin-bottom: 12px;
+}
+
+.form-container-wrapper {
     display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    margin-bottom: 16px;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
 }
 
-.add-group-section {
-    margin-top: 16px;
-    padding-top: 16px;
-    border-top: 1px dashed #e5e7eb;
-}
-
-@media (max-width: 768px) {
-    .form-grid,
-    .input-row {
-        grid-template-columns: 1fr;
-    }
-
-    .shipping-grid {
-        grid-template-columns: 1fr 1fr;
-    }
+.form-container {
+    display: flex;
+    margin-top: 24px;
+    gap: 24px;
+    flex-direction: column;
+    min-width: 85%;
+    align-items: center;
+    justify-content: center;
 }

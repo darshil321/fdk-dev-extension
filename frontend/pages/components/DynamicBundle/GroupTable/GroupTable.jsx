@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from 'paul-fds-ui';
 import { Icons } from 'paul-icons-react';
-import ProductItem from './ProductItem';
-import { useGetGroupByIdQuery, useGetGroupProductsAddonsMutation } from '../../store/services/dynamicBundleApi';
+
+
 import './GroupTable.css';
+import { useGetGroupByIdQuery, useGetGroupProductsAddonsMutation } from '@/store/services/bundles';
+import ProductItem from '../ProductItem/ProductItem';
 
 const GroupTable = ({
   group,
