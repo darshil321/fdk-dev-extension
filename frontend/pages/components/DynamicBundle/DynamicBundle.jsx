@@ -8,7 +8,7 @@ import './DynamicBundle.css';
 import EmptyState from './EmptyState/EmptyState';
 
 import { setIsCreating } from '@/store/slices/bundlesSlice';
-import { useGetBundlesQuery } from '@/store/services/bundles';
+import { useGetBundlesQuery } from '@/store/api';
 
 
 

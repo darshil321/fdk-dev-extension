@@ -1,19 +1,20 @@
-import React, { useState } from 'react';
-import Sidebar from '../Sidebar/Sidebar';
-import Groups from '../Groups/Groups';
-import './Layout.css';
+import React, { useState } from "react";
+import Sidebar from "../Sidebar/Sidebar";
+import Groups from "../Groups/Groups";
+import "./Layout.css";
 
-import DynamicBundle from '../DynamicBundle/DynamicBundle';
-
+import DynamicBundle from "../DynamicBundle/DynamicBundle";
 
 const Layout = ({ companyId }) => {
-  const [activeTab, setActiveTab] = useState('groups');
+  const [activeTab, setActiveTab] = useState("bundles"); // 'groups' or 'bundles'
 
   return (
     <div className="layout">
-      <Sidebar activeTab={activeTab} onTabChange={setActiveTab} />
+      <div>
+        <Sidebar activeTab={activeTab} onTabChange={setActiveTab} />
+      </div>
       <main className="main-content">
-        {activeTab === 'groups' ? (
+        {activeTab === "groups" ? (
           <Groups companyId={companyId} />
         ) : (
           <DynamicBundle />

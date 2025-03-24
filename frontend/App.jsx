@@ -4,6 +4,7 @@ import { store } from './store';
 import { Home } from './pages/Home';
 import { useParams } from 'react-router-dom';
 import { Provider } from 'react-redux';
+import "./pages/style/variable.css";
 
 function App() {
   const { company_id } = useParams();

@@ -1,15 +1,12 @@
 .sidebar {
-  width: 250px;
-  background: white;
-  border-right: 1px solid #e0e0e0;
-  padding: 20px 0;
+  width: 100px;
+  /* border-right: 1px solid #e0e0e0; */
 }
 
 .tabs {
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  padding: 0 16px;
+  border-radius: 24px !important;
 }
 
 .tab {
@@ -18,11 +15,11 @@
   border: none;
   background: none;
   cursor: pointer;
-  border-radius: 4px;
-  font-size: 14px;
+  font-size: 10px;
+  background-color: #fafafa;
 }
 
 .tab.active {
-  background-color: #f5f5f5;
-  color: #2e31be;
+  background-color: var(--background-color-primary) !important;
+  color: var(--primary-color);
 }
