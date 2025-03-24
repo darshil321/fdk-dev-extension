@@ -16,6 +16,7 @@ const DynamicBundle = ({ companyId, applicationId }) => {
 
   const { data: bundlesData, isLoading } = useGetBundlesQuery({
     companyId,
+    applicationId,
     params: {
       name: filters.search,
       status: filters.status !== "all" ? filters.status : undefined,
@@ -50,7 +51,11 @@ const DynamicBundle = ({ companyId, applicationId }) => {
 
   // Show create bundle form or bundles list
   return isCreating ? (
-    <CreateBundle onClose={() => dispatch(setIsCreating(false))} />
+    <CreateBundle
+      companyId={companyId}
+      applicationId={applicationId}
+      onClose={() => dispatch(setIsCreating(false))}
+    />
   ) : (
     <BundlesList
       bundles={bundles}

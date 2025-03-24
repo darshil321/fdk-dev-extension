@@ -1,7 +1,7 @@
 import React from "react";
 import "./CreateBundle.css";
 import  GroupTable  from "../GroupTable/GroupTable";
-import { Button, Input } from "paul-fds-ui";
+import { Button, IconButton, Input } from "paul-fds-ui";
 import { Icons } from "paul-icons-react";
 import { Formik } from "formik";
 
@@ -31,7 +31,7 @@ const validationSchema = Yup.object().shape({
   }),
 });
 
-const CreateBundle = ({  onClose }) => {
+const CreateBundle = ({ companyId, applicationId, onClose }) => {
 
   const [showGroupDropdown, setShowGroupDropdown] = useState(false);
   const [selectedGroupValue, setSelectedGroupValue] = useState("");
@@ -187,11 +187,11 @@ const CreateBundle = ({  onClose }) => {
                           <div className="media-actions">
                             <Button
                               kind="tertiary"
-                              icon={<Icons name="edit" />}
+                              // icon={<Icons name="edit" />}
                             />
                             <Button
                               kind="tertiary"
-                              icon={<Icons name="trash" />}
+                              // icon={<Icons name="trash" />}
                             />
                           </div>
                         </div>
@@ -240,7 +240,6 @@ const CreateBundle = ({  onClose }) => {
                     >
                       + Add Group
                     </Button>
-
                     {showGroupDropdown && (
                       <div className="group-dropdown">
                         <div className="group-dropdown-header">

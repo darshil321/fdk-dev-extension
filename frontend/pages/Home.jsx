@@ -88,7 +88,7 @@ export const Home = () => {
         </div>
       ) : (
         <div className="app">
-          <Layout companyId={company_id} />
+          <Layout companyId={company_id} applicationId={application_id} />
         </div>
       )}
     </>
