@@ -7,13 +7,14 @@ import "./DynamicBundle.css";
 import EmptyState from "./EmptyState/EmptyState";
 import { useGetBundlesQuery } from "@/store/services/bundles";
 
-const DynamicBundle = ({ companyId }) => {
+const DynamicBundle = ({ companyId ,applicationId}) => {
   const dispatch = useDispatch();
   const { isCreating } = useSelector((state) => state.bundles);
   const filters = useSelector((state) => state.bundles.filters);
 
   const { data: bundlesData, isLoading } = useGetBundlesQuery({
     companyId,
+    applicationId,
     params: {
       name: filters.search,
       status: filters.status !== "all" ? filters.status : undefined,
@@ -42,6 +43,8 @@ const DynamicBundle = ({ companyId }) => {
   // Show create bundle form or bundles list
   return isCreating ? (
     <CreateBundle
+      companyId={companyId}
+      applicationId={applicationId}
       onClose={() => dispatch(setIsCreating(false))}
     />
   ) : (
