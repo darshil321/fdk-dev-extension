@@ -7,7 +7,7 @@ import DynamicBundle from '../DynamicBundle/DynamicBundle';
 
 
 const Layout = ({ companyId }) => {
-  const [activeTab, setActiveTab] = useState('groups'); // 'groups' or 'bundles'
+  const [activeTab, setActiveTab] = useState('groups');
 
   return (
     <div className="layout">

@@ -1,11 +1,12 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useGetBundlesQuery } from '../../../store/services/bundles';
+
 import { setIsCreating } from '../../../store/slices/bundlesSlice';
 import CreateBundle from './CreateBundle/CreateBundle';
 import BundlesList from './BundleList/BundleList';
 import './DynamicBundle.css';
 import EmptyState from './EmptyState/EmptyState';
+import { useGetBundlesQuery } from '@/store/services/bundles';
 
 const DynamicBundle = ({ companyId }) => {
   const dispatch = useDispatch();
