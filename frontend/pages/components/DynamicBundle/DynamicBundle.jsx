@@ -1,13 +1,15 @@
-
 import { setIsCreating } from "@/store/slices/bundlesSlice";
 import { useDispatch, useSelector } from "react-redux";
 import BundlesList from "./BundleList/BundleList";
 import CreateBundle from "./CreateBundle/CreateBundle";
 import "./DynamicBundle.css";
 import EmptyState from "./EmptyState/EmptyState";
-import { useGetBundlesQuery } from "@/store/services/bundles";
+import {
+  useGetBundlesQuery,
+  useGetGroupsQuery,
+} from "@/store/services/bundles";
 
-const DynamicBundle = ({ companyId }) => {
+const DynamicBundle = ({ companyId, applicationId }) => {
   const dispatch = useDispatch();
   const { isCreating } = useSelector((state) => state.bundles);
   const filters = useSelector((state) => state.bundles.filters);
@@ -20,6 +22,13 @@ const DynamicBundle = ({ companyId }) => {
       sort_by: filters.sortBy,
     },
   });
+
+  const { data: groups, error } = useGetGroupsQuery({
+    companyId,
+    applicationId,
+  });
+
+  console.log("groups", groups);
 
   const bundles = bundlesData?.items || [];
 
@@ -41,9 +50,7 @@ const DynamicBundle = ({ companyId }) => {
 
   // Show create bundle form or bundles list
   return isCreating ? (
-    <CreateBundle
-      onClose={() => dispatch(setIsCreating(false))}
-    />
+    <CreateBundle onClose={() => dispatch(setIsCreating(false))} />
   ) : (
     <BundlesList
       bundles={bundles}

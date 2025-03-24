@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from 'react-router-dom';
+import { useParams } from "react-router-dom";
 import "./style/home.css";
 import DEFAULT_NO_IMAGE from "../public/assets/default_icon_listing.png";
 import loaderGif from "../public/assets/loader.gif";
@@ -9,13 +9,15 @@ import Layout from "./components/Layouts/Layout";
 
 const EXAMPLE_MAIN_URL = window.location.origin;
 
-export const Home = ()  => {
+export const Home = () => {
   const [pageLoading, setPageLoading] = useState(false);
   const [productList, setProductList] = useState([]);
-  const DOC_URL_PATH = "/help/docs/sdk/latest/platform/company/catalog/#getProducts";
-  const DOC_APP_URL_PATH = "/help/docs/sdk/latest/platform/application/catalog#getAppProducts";
+  const DOC_URL_PATH =
+    "/help/docs/sdk/latest/platform/company/catalog/#getProducts";
+  const DOC_APP_URL_PATH =
+    "/help/docs/sdk/latest/platform/application/catalog#getAppProducts";
   const { application_id, company_id } = useParams();
-  const documentationUrl ='https://api.fynd.com'
+  const documentationUrl = "https://api.fynd.com";
 
   useEffect(() => {
     isApplicationLaunch() ? fetchApplicationProducts() : fetchProducts();
@@ -24,11 +26,14 @@ export const Home = ()  => {
   const fetchProducts = async () => {
     setPageLoading(true);
     try {
-      const { data } = await axios.get(urlJoin(EXAMPLE_MAIN_URL, '/api/products'),{
-        headers: {
-          "x-company-id": company_id,
+      const { data } = await axios.get(
+        urlJoin(EXAMPLE_MAIN_URL, "/api/products"),
+        {
+          headers: {
+            "x-company-id": company_id,
+          },
         }
-      });
+      );
       setProductList(data.items);
     } catch (e) {
       console.error("Error fetching products:", e);
@@ -40,11 +45,17 @@ export const Home = ()  => {
   const fetchApplicationProducts = async () => {
     setPageLoading(true);
     try {
-      const { data } = await axios.get(urlJoin(EXAMPLE_MAIN_URL, `/api/products/application/${application_id}`),{
-        headers: {
-          "x-company-id": company_id,
+      const { data } = await axios.get(
+        urlJoin(
+          EXAMPLE_MAIN_URL,
+          `/api/products/application/${application_id}`
+        ),
+        {
+          headers: {
+            "x-company-id": company_id,
+          },
         }
-      })
+      );
       setProductList(data.items);
     } catch (e) {
       console.error("Error fetching application products:", e);
@@ -53,12 +64,11 @@ export const Home = ()  => {
     }
   };
 
-
   const productProfileImage = (media) => {
     if (!media || !media.length) {
       return DEFAULT_NO_IMAGE;
     }
-    const profileImg = media.find(m => m.type === "image");
+    const profileImg = media.find((m) => m.type === "image");
     return profileImg?.url || DEFAULT_NO_IMAGE;
   };
 
@@ -78,9 +88,9 @@ export const Home = ()  => {
         </div>
       ) : (
         <div className="app">
-            <Layout companyId={company_id} />
-          </div>
+          <Layout companyId={company_id} />
+        </div>
       )}
     </>
   );
-}
+};

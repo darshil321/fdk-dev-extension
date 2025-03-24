@@ -1,53 +1,55 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 export const dynamicBundleApi = createApi({
-  reducerPath: 'dynamicBundleApi',
+  reducerPath: "dynamicBundleApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: '/api/v1/dynamic-bundle',
+    baseUrl: `/api/v1/dynamic-bundle`,
     prepareHeaders: (headers, { getState }) => {
       const companyId = getState().company?.currentCompanyId;
       if (companyId) {
-        headers.set('x-company-id', companyId);
+        headers.set("x-company-id", companyId);
       }
       return headers;
     },
   }),
-  tagTypes: ['Bundle', 'Group', 'Product'],
+  tagTypes: ["Bundle", "Group", "Product"],
   endpoints: (builder) => ({
     // Groups endpoints
     getGroups: builder.query({
       query: ({ companyId, applicationId, params = {} }) => ({
         url: `/company/${companyId}/application/${applicationId}/groups`,
         params: {
-          name: params.name || '',
+          name: params.name || "",
           page_no: params.page_no || 1,
           page_size: params.page_size || 10,
         },
       }),
-      providesTags: ['Group'],
+      providesTags: ["Group"],
       transformResponse: (response) => {
         // Transform the response to match the expected format in our components
-        return response.items.map(group => ({
+        return response.items.map((group) => ({
           label: group.name,
           value: group._id,
-          products: group.products || []
+          products: group.products || [],
         }));
-      }
+      },
     }),
 
     getGroupById: builder.query({
       query: ({ companyId, applicationId, groupId }) =>
         `/company/${companyId}/application/${applicationId}/groups/${groupId}`,
-      providesTags: (result, error, { groupId }) => [{ type: 'Group', id: groupId }],
+      providesTags: (result, error, { groupId }) => [
+        { type: "Group", id: groupId },
+      ],
     }),
 
     createGroup: builder.mutation({
       query: ({ companyId, applicationId, data }) => ({
         url: `/company/${companyId}/application/${applicationId}/groups`,
-        method: 'POST',
+        method: "POST",
         body: data,
       }),
-      invalidatesTags: ['Group'],
+      invalidatesTags: ["Group"],
     }),
 
     // Products endpoints
@@ -55,18 +57,18 @@ export const dynamicBundleApi = createApi({
       query: ({ companyId, params = {} }) => ({
         url: `/company/${companyId}/products`,
         params: {
-          name: params.name || '',
+          name: params.name || "",
           page_no: params.page_no || 1,
           page_size: params.page_size || 10,
         },
       }),
-      providesTags: ['Product'],
+      providesTags: ["Product"],
     }),
 
     getGroupProductsAddons: builder.mutation({
       query: ({ companyId, applicationId, groupId, itemUids }) => ({
         url: `/company/${companyId}/application/${applicationId}/groups/${groupId}/products/addons`,
-        method: 'POST',
+        method: "POST",
         body: { item_uids: itemUids },
       }),
     }),
@@ -76,56 +78,58 @@ export const dynamicBundleApi = createApi({
       query: ({ companyId, applicationId, params = {} }) => ({
         url: `/company/${companyId}/application/${applicationId}/combos`,
         params: {
-          name: params.name || '',
+          name: params.name || "",
           page_no: params.page_no || 1,
           page_size: params.page_size || 10,
         },
       }),
-      providesTags: ['Bundle'],
+      providesTags: ["Bundle"],
     }),
 
     getBundleById: builder.query({
       query: ({ companyId, applicationId, comboId }) =>
         `/company/${companyId}/application/${applicationId}/combos/${comboId}`,
-      providesTags: (result, error, { comboId }) => [{ type: 'Bundle', id: comboId }],
+      providesTags: (result, error, { comboId }) => [
+        { type: "Bundle", id: comboId },
+      ],
     }),
 
     createBundle: builder.mutation({
       query: ({ companyId, applicationId, data }) => ({
         url: `/company/${companyId}/application/${applicationId}/combos`,
-        method: 'POST',
+        method: "POST",
         body: data,
       }),
-      invalidatesTags: ['Bundle'],
+      invalidatesTags: ["Bundle"],
     }),
 
     updateBundle: builder.mutation({
       query: ({ companyId, applicationId, comboId, data }) => ({
         url: `/company/${companyId}/application/${applicationId}/combos/${comboId}`,
-        method: 'PUT',
+        method: "PUT",
         body: data,
       }),
       invalidatesTags: (result, error, { comboId }) => [
-        { type: 'Bundle', id: comboId },
-        'Bundle',
+        { type: "Bundle", id: comboId },
+        "Bundle",
       ],
     }),
 
     deleteBundle: builder.mutation({
       query: ({ companyId, applicationId, comboId }) => ({
         url: `/company/${companyId}/application/${applicationId}/combos/${comboId}`,
-        method: 'DELETE',
+        method: "DELETE",
       }),
-      invalidatesTags: ['Bundle'],
+      invalidatesTags: ["Bundle"],
     }),
 
     searchBundles: builder.mutation({
       query: ({ companyId, applicationId, ids, slugs }) => ({
         url: `/company/${companyId}/application/${applicationId}/combos/search`,
-        method: 'POST',
+        method: "POST",
         body: {
           combo_ids: ids || [],
-          slug_ids: slugs || []
+          slug_ids: slugs || [],
         },
       }),
     }),
