@@ -1,6 +1,6 @@
+import { useGetGroupProductsQuery } from "@/store/api";
 import { Button } from "paul-fds-ui";
-// import './CreateBundle.css';
-import { useGetGroupProductsQuery } from '../../../../store/services/groups.js';
+
 
 export const GroupTable = ({ group, onRemove }) => {
   const { data: products, isLoading } = useGetGroupProductsQuery(group.id);

@@ -1,12 +1,16 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { setIsCreating } from '../../../store/slices/bundlesSlice';
+
 import CreateBundle from './CreateBundle/CreateBundle';
 import BundlesList from './BundleList/BundleList';
 import './DynamicBundle.css';
 import EmptyState from './EmptyState/EmptyState';
+
+import { setIsCreating } from '@/store/slices/bundlesSlice';
 import { useGetBundlesQuery } from '@/store/services/bundles';
+
+
 
 const DynamicBundle = ({ companyId }) => {
   const dispatch = useDispatch();

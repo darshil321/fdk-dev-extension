@@ -1,7 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 export const api = createApi({
-  reducerPath: 'api',
   baseQuery: fetchBaseQuery({
     baseUrl: '/',
     prepareHeaders: (headers, { getState }) => {
@@ -12,12 +11,10 @@ export const api = createApi({
       return headers;
     },
   }),
-  tagTypes: ['Bundle', 'Group'],
   endpoints: (builder) => ({
     // Groups endpoints
     getGroups: builder.query({
       query: () => 'api/groups',
-      providesTags: ['Group'],
     }),
     getGroupDetails: builder.query({
       query: (groupId) => `api/groups/${groupId}`,
@@ -31,7 +28,6 @@ export const api = createApi({
     // Bundles endpoints
     getBundles: builder.query({
       query: () => 'api/bundles',
-      providesTags: ['Bundle'],
     }),
     createBundle: builder.mutation({
       query: (bundle) => ({
@@ -39,7 +35,6 @@ export const api = createApi({
         method: 'POST',
         body: bundle,
       }),
-      invalidatesTags: ['Bundle'],
     }),
     updateBundle: builder.mutation({
       query: ({ id, ...bundle }) => ({
@@ -47,7 +42,6 @@ export const api = createApi({
         method: 'PUT',
         body: bundle,
       }),
-      invalidatesTags: ['Bundle'],
     }),
   }),
 });

@@ -88,15 +88,15 @@ const CreateBundle = ({ companyId, onClose }) => {
       initialValues={initialValues}
       validationSchema={validationSchema}
       onSubmit={async (values, { setSubmitting }) => {
-              try {
-                await handleSubmit(values);
-                onClose();
-              } catch (error) {
-                console.error('Failed to create bundle:', error);
-              } finally {
-                setSubmitting(false);
-              }
-            }}
+        try {
+          await handleSubmit(values);
+          onClose();
+        } catch (error) {
+          console.error('Failed to create bundle:', error);
+        } finally {
+          setSubmitting(false);
+        }
+      }}
     >
       {({ values, handleChange, setFieldValue, errors, touched }) => (
         <Form className="create-bundle-container">
@@ -114,7 +114,7 @@ const CreateBundle = ({ companyId, onClose }) => {
             </Button>
           </div>
 
-          <Card className="form-card">
+          {/* <Card className="form-card">
             <h3 className="card-title">Basic Information</h3>
             <div className="form-grid">
               <Input
@@ -138,6 +138,7 @@ const CreateBundle = ({ companyId, onClose }) => {
                 value={values.basicInfo.itemCode}
                 onChange={handleChange}
                 error={touched.basicInfo?.itemCode && errors.basicInfo?.itemCode}
+                required
               />
               <Input
                 label="Slug"
@@ -145,6 +146,7 @@ const CreateBundle = ({ companyId, onClose }) => {
                 value={values.basicInfo.slug}
                 onChange={handleChange}
                 error={touched.basicInfo?.slug && errors.basicInfo?.slug}
+                required
               />
               <Input
                 label="Image URL"
@@ -155,7 +157,7 @@ const CreateBundle = ({ companyId, onClose }) => {
                 placeholder="Enter image URL"
               />
             </div>
-          </Card>
+          </Card> */}
 
           <Card className="form-card">
             <h3 className="card-title">Groups</h3>
@@ -171,7 +173,7 @@ const CreateBundle = ({ companyId, onClose }) => {
 
             {values.selectedGroups.map((group, index) => (
               <GroupTable
-                key={group.value}
+                key={group.value || index}
                 group={group}
                 onRemove={() => {
                   const newGroups = [...values.selectedGroups];
@@ -187,9 +189,10 @@ const CreateBundle = ({ companyId, onClose }) => {
             >
               Add Another Group
             </Button>
+
           </Card>
 
-          <Card className="form-card">
+          {/* <Card className="form-card">
             <h3 className="card-title">Indicative Price</h3>
             <div className="form-grid">
               <Input
@@ -199,6 +202,7 @@ const CreateBundle = ({ companyId, onClose }) => {
                 value={values.pricing.actualPrice}
                 onChange={handleChange}
                 error={touched.pricing?.actualPrice && errors.pricing?.actualPrice}
+                required
               />
               <Input
                 label="Selling Price"
@@ -207,11 +211,12 @@ const CreateBundle = ({ companyId, onClose }) => {
                 value={values.pricing.sellingPrice}
                 onChange={handleChange}
                 error={touched.pricing?.sellingPrice && errors.pricing?.sellingPrice}
+                required
               />
             </div>
-          </Card>
+          </Card> */}
 
-          <Card className="form-card">
+          {/* <Card className="form-card">
             <h3 className="card-title">Shipping Details</h3>
             <h4 className="card-subtitle">Packaging Measurements</h4>
             <div className="form-grid">
@@ -248,9 +253,9 @@ const CreateBundle = ({ companyId, onClose }) => {
                 error={touched.shipping?.weight && errors.shipping?.weight}
               />
             </div>
-          </Card>
+          </Card> */}
 
-          <Card className="form-card">
+          {/* <Card className="form-card">
             <h3 className="card-title">Attributes</h3>
             <div className="form-grid">
               <Input
@@ -284,7 +289,7 @@ const CreateBundle = ({ companyId, onClose }) => {
                 onChange={handleChange}
               />
             </div>
-          </Card>
+          </Card> */}
         </Form>
       )}
     </Formik>
