@@ -1,0 +1,137 @@
+.custom-table-container {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.table-header {
+  padding: 16px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.bulk-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.table-wrapper {
+  overflow-x: auto;
+}
+
+.custom-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.custom-table th,
+.custom-table td {
+  padding: 12px 16px;
+  text-align: left;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.custom-table th {
+  background-color: var(--background-light);
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.th-content {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.sortable {
+  cursor: pointer;
+}
+
+.sort-icons {
+  display: flex;
+  flex-direction: column;
+  opacity: 0.5;
+}
+
+.sortable:hover .sort-icons {
+  opacity: 1;
+}
+
+.checkbox-column {
+  width: 48px;
+  text-align: center;
+}
+
+.clickable {
+  cursor: pointer;
+}
+
+.clickable:hover {
+  background-color: var(--background-light);
+}
+
+tr.selected {
+  background-color: var(--primary-light);
+}
+
+.loading-cell,
+.empty-cell {
+  text-align: center;
+  padding: 48px !important;
+}
+
+.loading-indicator,
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  color: var(--text-secondary);
+}
+
+.table-pagination {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  border-top: 1px solid var(--border-color);
+}
+
+.pagination-info {
+  color: var(--text-secondary);
+  font-size: 14px;
+}
+
+.pagination-controls {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.pagination-controls button {
+  min-width: 32px;
+  height: 32px;
+  padding: 0 8px;
+}
+
+.pagination-number {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 32px;
+  height: 32px;
+  padding: 0 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.pagination-number.active {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+.pagination-number.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

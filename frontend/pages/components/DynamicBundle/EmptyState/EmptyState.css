@@ -1,0 +1,16 @@
+.empty-bundle-state {
+  text-align: center;
+  padding: 48px 24px;
+  max-width: 600px;
+  margin: 48px auto;
+}
+
+.empty-bundle-state h2 {
+  font-size: 24px;
+  margin-bottom: 16px;
+}
+
+.empty-bundle-state p {
+  color: var(--text-secondary);
+  margin-bottom: 24px;
+}

@@ -1,0 +1,20 @@
+.empty-state {
+  text-align: center;
+  padding: 48px;
+  max-width: 600px;
+  margin: 48px auto;
+}
+
+.button-group {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  margin-top: 24px;
+}
+
+.loader {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+}
