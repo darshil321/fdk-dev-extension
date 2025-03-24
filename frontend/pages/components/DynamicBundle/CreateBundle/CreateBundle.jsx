@@ -1,13 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import "./CreateBundle.css";
-import  GroupTable  from "../GroupTable/GroupTable";
-import { Button, IconButton, Input } from "paul-fds-ui";
+import GroupTable from "../GroupTable/GroupTable";
+import { Button, Input } from "paul-fds-ui";
 import { Icons } from "paul-icons-react";
 import { Formik } from "formik";
 
 import * as Yup from "yup";
 import { useCreateBundleMutation } from "@/store/api";
-import { useState } from "react";
 import FormCard from "../../common/FormCard/FormCard";
 import { groupOptions, productsData } from "@/constants/data";
 
@@ -32,10 +31,12 @@ const validationSchema = Yup.object().shape({
 });
 
 const CreateBundle = ({ companyId, applicationId, onClose }) => {
-
   const [showGroupDropdown, setShowGroupDropdown] = useState(false);
   const [selectedGroupValue, setSelectedGroupValue] = useState("");
   const [createBundleMutation, { isLoading }] = useCreateBundleMutation();
+
+  // Handle errors
+  const [error, setError] = useState(null);
 
   const initialValues = {
     basicInfo: {
@@ -66,22 +67,88 @@ const CreateBundle = ({ companyId, applicationId, onClose }) => {
     media: [],
   };
 
+  // Filter groups based on search term with error handling
+  const getFilteredGroups = () => {
+    try {
+      if (!groupOptions || !Array.isArray(groupOptions)) {
+        console.error("groupOptions is not an array:", groupOptions);
+        return [];
+      }
+
+      return groupOptions.filter((group) => {
+        if (!group || typeof group !== 'object' || !group.label) {
+          console.error("Invalid group object:", group);
+          return false;
+        }
+
+        return group.label
+          .toLowerCase()
+          .includes((selectedGroupValue || "").toLowerCase());
+      });
+    } catch (err) {
+      console.error("Error filtering groups:", err);
+      return [];
+    }
+  };
+
+  // Transform form data for API submission
+  const transformFormData = (values) => {
+    try {
+      // Create components from selected groups
+      const components = values.selectedGroups.map(group => ({
+        name: group.label,
+        type: "node",
+        group: group.value,
+        products: (productsData[group.value] || []).map(product => ({
+          item_uid: product.id,
+          price: parseFloat(product.price) || 0,
+          quantity: 1
+        }))
+      }));
+
+      return {
+        name: values.basicInfo.name,
+        item_code: values.basicInfo.itemCode,
+        slug: values.basicInfo.slug,
+        short_description: values.basicInfo.description,
+        components: components,
+        indicative_price: {
+          selling_price: parseFloat(values.pricing.sellingPrice) || 0,
+          actual_price: parseFloat(values.pricing.actualPrice) || 0
+        },
+        is_active: true
+      };
+    } catch (err) {
+      console.error("Error transforming form data:", err);
+      setError("Error preparing form data. Please check your inputs.");
+      throw err;
+    }
+  };
+
   return (
     <Formik
       initialValues={initialValues}
       validationSchema={validationSchema}
       onSubmit={async (values, { setSubmitting }) => {
         try {
+          // Clear any previous errors
+          setError(null);
+
+          // Transform the data for API
+          const bundleData = transformFormData(values);
+
+          // Call the API
           await createBundleMutation({
-            ...values.basicInfo,
-            groups: values.selectedGroups,
-            pricing: values.pricing,
-            shipping: values.shipping,
-            attributes: values.attributes,
-          });
-          onClose();
+            companyId,
+            applicationId,
+            data: bundleData
+          }).unwrap();
+
+          // Close the form on success
+          onClose && onClose();
         } catch (error) {
           console.error("Failed to create bundle:", error);
+          setError(error.message || "Failed to create bundle. Please try again.");
         } finally {
           setSubmitting(false);
         }
@@ -96,31 +163,38 @@ const CreateBundle = ({ companyId, applicationId, onClose }) => {
         isSubmitting,
         handleSubmit,
       }) => (
-        <form className="create-bundle-container">
+        <form className="create-bundle-container" onSubmit={handleSubmit}>
+          {error && (
+            <div className="error-message">
+              {error}
+            </div>
+          )}
+
           <div className="bundle-header">
             <div className="header-left">
               <div
                 style={{
-                  background: "",
                   display: "flex",
                   padding: "12px",
                 }}
               >
-                {/* <IconButton
-                  appearance="error"
-                  icon={<Icons name="arrow-left" />}
-                  isClickable
-                  kind="primary"
+                <Button
+                  kind="secondary"
                   onClick={onClose}
-                  size="l"
-                /> */}
+                  icon={<Icons name="arrow-left" />}
+                />
               </div>
               <h2>Bundle</h2>
             </div>
-            <Button kind="primary" type="submit" loading={isSubmitting}>
+            <Button
+              kind="primary"
+              type="submit"
+              loading={isLoading || isSubmitting}
+            >
               Save
             </Button>
           </div>
+
           <div className="form-container-wrapper">
             <div className="form-container">
               <FormCard className="form-card">
@@ -177,7 +251,7 @@ const CreateBundle = ({ companyId, applicationId, onClose }) => {
                   </Button>
                 </div>
                 <div className="media-preview">
-                  {values.media.length === 0 ? (
+                  {!values.media || values.media.length === 0 ? (
                     <div className="empty-media">No media uploaded yet</div>
                   ) : (
                     <div className="media-grid">
@@ -185,14 +259,8 @@ const CreateBundle = ({ companyId, applicationId, onClose }) => {
                         <div key={index} className="media-item">
                           <img src={item.url} alt={`Media ${index + 1}`} />
                           <div className="media-actions">
-                            <Button
-                              kind="tertiary"
-                              // icon={<Icons name="edit" />}
-                            />
-                            <Button
-                              kind="tertiary"
-                              // icon={<Icons name="trash" />}
-                            />
+                            <Button kind="tertiary">Edit</Button>
+                            <Button kind="tertiary">Remove</Button>
                           </div>
                         </div>
                       ))}
@@ -218,15 +286,19 @@ const CreateBundle = ({ companyId, applicationId, onClose }) => {
                   </Button>
                 </div>
 
-                {values.selectedGroups.map((group, index) => (
+                {values.selectedGroups && values.selectedGroups.map((group, index) => (
                   <GroupTable
                     key={`${group.value}-${index}`}
                     group={group}
-                    products={productsData[group.value] || []}
+                    products={productsData && productsData[group.value] ? productsData[group.value] : []}
                     onRemove={() => {
-                      const newGroups = [...values.selectedGroups];
-                      newGroups.splice(index, 1);
-                      setFieldValue("selectedGroups", newGroups);
+                      try {
+                        const newGroups = [...values.selectedGroups];
+                        newGroups.splice(index, 1);
+                        setFieldValue("selectedGroups", newGroups);
+                      } catch (err) {
+                        console.error("Error removing group:", err);
+                      }
                     }}
                   />
                 ))}
@@ -236,10 +308,14 @@ const CreateBundle = ({ companyId, applicationId, onClose }) => {
                     <Button
                       kind="text"
                       className="add-group-btn"
-                      onClick={() => setShowGroupDropdown(!showGroupDropdown)}
+                      onClick={(e) => {
+                        e.preventDefault(); // Prevent form submission
+                        setShowGroupDropdown(!showGroupDropdown);
+                      }}
                     >
                       + Add Group
                     </Button>
+
                     {showGroupDropdown && (
                       <div className="group-dropdown">
                         <div className="group-dropdown-header">
@@ -255,27 +331,29 @@ const CreateBundle = ({ companyId, applicationId, onClose }) => {
                             <Button
                               kind="tertiary"
                               icon={<Icons name="x" />}
-                              onClick={() => setSelectedGroupValue("")}
+                              onClick={(e) => {
+                                e.preventDefault();
+                                setSelectedGroupValue("");
+                              }}
                             />
                             <Button
                               kind="tertiary"
                               icon={<Icons name="chevron-up" />}
-                              onClick={() => setShowGroupDropdown(false)}
+                              onClick={(e) => {
+                                e.preventDefault();
+                                setShowGroupDropdown(false);
+                              }}
                             />
                           </div>
                         </div>
                         <div className="group-dropdown-options">
-                          {groupOptions
-                            .filter((group) =>
-                              group.label
-                                .toLowerCase()
-                                .includes(selectedGroupValue.toLowerCase())
-                            )
-                            .map((group) => (
-                              <div
-                                key={group.value}
-                                className="group-option"
-                                onClick={() => {
+                          {getFilteredGroups().map((group) => (
+                            <div
+                              key={group.value}
+                              className="group-option"
+                              onClick={(e) => {
+                                e.preventDefault();
+                                try {
                                   if (
                                     !values.selectedGroups.some(
                                       (g) => g.value === group.value
@@ -288,11 +366,14 @@ const CreateBundle = ({ companyId, applicationId, onClose }) => {
                                   }
                                   setShowGroupDropdown(false);
                                   setSelectedGroupValue("");
-                                }}
-                              >
-                                {group.label}
-                              </div>
-                            ))}
+                                } catch (err) {
+                                  console.error("Error adding group:", err);
+                                }
+                              }}
+                            >
+                              {group.label}
+                            </div>
+                          ))}
                         </div>
                       </div>
                     )}
