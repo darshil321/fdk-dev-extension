@@ -1,20 +1,22 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 export const groupsApi = createApi({
-  reducerPath: 'groupsApi',
+  reducerPath: "groupsApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: '/',
+    baseUrl: "/",
     prepareHeaders: (headers, { getState }) => {
       const companyId = getState().company?.currentCompanyId;
-      headers.set('x-company-id', companyId);
+      headers.set("x-company-id", companyId);
       return headers;
     },
   }),
-  tagTypes: ['Group'],
+  tagTypes: ["Group"],
+
   endpoints: (builder) => ({
     getGroups: builder.query({
-      query: () => 'api/groups',
-      providesTags: ['Group'],
+      query: ({ companyId, applicationId }) =>
+        `api/v1/dynamic-bundle/company/${companyId}/application/${applicationId}/groups?name=&page_no=1&page_size=10`,
+      providesTags: ["Group"],
     }),
     getGroupProducts: builder.query({
       query: (groupId) => `api/groups/${groupId}/products`,
@@ -22,7 +24,4 @@ export const groupsApi = createApi({
   }),
 });
 
-export const {
-  useGetGroupsQuery,
-  useGetGroupProductsQuery,
-} = groupsApi;
+export const { useGetGroupsQuery, useGetGroupProductsQuery } = groupsApi;

@@ -1,51 +1,63 @@
-import React, { useState, useEffect } from 'react';
-import { Button, Input } from 'paul-fds-ui';
-import { Icons } from 'paul-icons-react';
+import React, { useState, useEffect } from "react";
+import { Button, Input } from "paul-fds-ui";
+import { Icons } from "paul-icons-react";
 
-import './GroupSelector.css';
-import { useGetGroupsQuery } from '@/store/services/bundles';
+import "./GroupSelector.css";
+import { useGetGroupsQuery } from "@/store/services/bundles";
 
-const GroupSelector = ({ onGroupSelect, companyId, applicationId, selectedGroups = [] }) => {
+const GroupSelector = ({
+  onGroupSelect,
+  companyId,
+  applicationId,
+  selectedGroups = [],
+}) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
 
-
-  const { data: groups, isLoading, error } = useGetGroupsQuery(
+  const {
+    data: groups,
+    isLoading,
+    error,
+  } = useGetGroupsQuery(
     {
       companyId,
       applicationId,
-      params: { name: searchTerm }
+      params: { name: searchTerm },
     },
     { skip: !isOpen }
   );
 
+  console.log("groups", groups);
 
-  const filteredGroups = groups?.filter(group =>
-    !selectedGroups.some(selectedGroup => selectedGroup.value === group.value)
-  ) || [];
-
+  const filteredGroups =
+    groups?.filter(
+      (group) =>
+        !selectedGroups.some(
+          (selectedGroup) => selectedGroup.value === group.value
+        )
+    ) || [];
 
   useEffect(() => {
     const handleClickOutside = (event) => {
-      const dropdown = document.querySelector('.group-selector-container');
+      const dropdown = document.querySelector(".group-selector-container");
       if (dropdown && !dropdown.contains(event.target)) {
         setIsOpen(false);
       }
     };
 
     if (isOpen) {
-      document.addEventListener('mousedown', handleClickOutside);
+      document.addEventListener("mousedown", handleClickOutside);
     }
 
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [isOpen]);
 
   const handleGroupSelect = (group) => {
     onGroupSelect(group);
     setIsOpen(false);
-    setSearchTerm('');
+    setSearchTerm("");
   };
 
   return (
@@ -72,7 +84,7 @@ const GroupSelector = ({ onGroupSelect, companyId, applicationId, selectedGroups
                 <Button
                   kind="tertiary"
                   icon={<Icons name="x" />}
-                  onClick={() => setSearchTerm('')}
+                  onClick={() => setSearchTerm("")}
                 />
               )}
               <Button
@@ -90,10 +102,12 @@ const GroupSelector = ({ onGroupSelect, companyId, applicationId, selectedGroups
               <div className="group-error">Error loading groups</div>
             ) : filteredGroups.length === 0 ? (
               <div className="no-groups-found">
-                {searchTerm ? 'No matching groups found' : 'No available groups'}
+                {searchTerm
+                  ? "No matching groups found"
+                  : "No available groups"}
               </div>
             ) : (
-              filteredGroups.map(group => (
+              filteredGroups.map((group) => (
                 <div
                   key={group.value}
                   className="group-option"
