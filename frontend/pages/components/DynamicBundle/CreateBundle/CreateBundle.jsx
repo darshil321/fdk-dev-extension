@@ -3,10 +3,11 @@ import './CreateBundle.css';
 import { GroupTable } from '../GroupTable/GroupTable';
 import { Button, Dropdown, Input } from 'paul-fds-ui';
 import { Icons } from 'paul-icons-react';
-import { Formik, Form } from 'formik';
+import { Formik } from 'formik';
 
 import * as Yup from 'yup';
 import { useCreateBundleMutation, useGetGroupsQuery } from '@/store/api';
+import { useState } from 'react';
 
 const Card = ({ children, className }) => {
   return (
@@ -37,9 +38,112 @@ const validationSchema = Yup.object().shape({
 });
 
 const CreateBundle = ({ companyId, onClose }) => {
-  const { data: groups } = useGetGroupsQuery();
-  const [createBundle, { isLoading }] = useCreateBundleMutation();
+  // Mock data for groups and products
+  const groupOptions = [
+    { label: "Pizza 1", value: "pizza1" },
+    { label: "Pizza 2", value: "pizza2" },
+    { label: "Sides", value: "sides" },
+    { label: "Drinks", value: "drinks" }
+  ];
 
+  const productsData = {
+    pizza1: [
+      {
+        id: "p1",
+        name: "Chicken Supreme Cheese Crust",
+        size: "Regular",
+        addOns: 2,
+        price: "5.95",
+        imageUrl: "/api/placeholder/80/80"
+      },
+      {
+        id: "p2",
+        name: "Chicken Salami",
+        size: "Default",
+        price: "0",
+        imageUrl: "/api/placeholder/80/80"
+      },
+      {
+        id: "p3",
+        name: "Chicken Rolls",
+        size: "Default",
+        price: "3.50",
+        imageUrl: "/api/placeholder/80/80"
+      },
+      {
+        id: "p4",
+        name: "Blazing Seafood Stuffed Crust",
+        size: "Regular",
+        addOns: 2,
+        price: "6.12",
+        imageUrl: "/api/placeholder/80/80"
+      },
+      {
+        id: "p5",
+        name: "Cheeseburger Beef Crackin Thin",
+        size: "Regular",
+        addOns: 2,
+        price: "5.95",
+        imageUrl: "/api/placeholder/80/80"
+      }
+    ],
+    pizza2: [
+      {
+        id: "p6",
+        name: "Pepperoni Pizza",
+        size: "Regular",
+        price: "4.95",
+        imageUrl: "/api/placeholder/80/80"
+      },
+      {
+        id: "p7",
+        name: "Veggie Supreme",
+        size: "Regular",
+        price: "5.50",
+        imageUrl: "/api/placeholder/80/80"
+      }
+    ],
+    sides: [
+      {
+        id: "s1",
+        name: "Garlic Bread",
+        size: "Regular",
+        price: "2.50",
+        imageUrl: "/api/placeholder/80/80"
+      },
+      {
+        id: "s2",
+        name: "Chicken Wings",
+        size: "6 pcs",
+        price: "4.95",
+        imageUrl: "/api/placeholder/80/80"
+      }
+    ],
+    drinks: [
+      {
+        id: "d1",
+        name: "Coca-Cola",
+        size: "330ml",
+        price: "1.50",
+        imageUrl: "/api/placeholder/80/80"
+      },
+      {
+        id: "d2",
+        name: "Sprite",
+        size: "330ml",
+        price: "1.50",
+        imageUrl: "/api/placeholder/80/80"
+      }
+    ]
+  };
+
+  // States for group selection
+  const [showGroupDropdown, setShowGroupDropdown] = useState(false);
+  const [selectedGroupValue, setSelectedGroupValue] = useState("");
+  const [createBundleMutation, { isLoading }] = useCreateBundleMutation();
+
+
+  // Initial form values
   const initialValues = {
     basicInfo: {
       name: '',
@@ -65,22 +169,8 @@ const CreateBundle = ({ companyId, onClose }) => {
       productColor: '',
       productFit: '',
       gender: ''
-    }
-  };
-
-  const handleSubmit = async (values) => {
-    try {
-      await createBundle({
-        ...values.basicInfo,
-        groups: values.selectedGroups,
-        pricing: values.pricing,
-        shipping: values.shipping,
-        attributes: values.attributes
-      }).unwrap();
-      onClose();
-    } catch (error) {
-      console.error('Failed to create bundle:', error);
-    }
+    },
+    media: []
   };
 
   return (
@@ -89,7 +179,13 @@ const CreateBundle = ({ companyId, onClose }) => {
       validationSchema={validationSchema}
       onSubmit={async (values, { setSubmitting }) => {
         try {
-          await handleSubmit(values);
+          await createBundleMutation({
+            ...values.basicInfo,
+            groups: values.selectedGroups,
+            pricing: values.pricing,
+            shipping: values.shipping,
+            attributes: values.attributes
+          });
           onClose();
         } catch (error) {
           console.error('Failed to create bundle:', error);
@@ -98,8 +194,8 @@ const CreateBundle = ({ companyId, onClose }) => {
         }
       }}
     >
-      {({ values, handleChange, setFieldValue, errors, touched }) => (
-        <Form className="create-bundle-container">
+      {({ values, handleChange, setFieldValue, errors, touched, isSubmitting,handleSubmit }) => (
+        <form className="create-bundle-container">
           <div className="bundle-header">
             <div className="header-left">
               <Button
@@ -109,12 +205,12 @@ const CreateBundle = ({ companyId, onClose }) => {
               />
               <h2>Bundle</h2>
             </div>
-            <Button kind="primary" type="submit" loading={isLoading}>
+            <Button kind="primary" type="submit" loading={isSubmitting}>
               Save
             </Button>
           </div>
 
-          {/* <Card className="form-card">
+          <Card className="form-card">
             <h3 className="card-title">Basic Information</h3>
             <div className="form-grid">
               <Input
@@ -132,49 +228,73 @@ const CreateBundle = ({ companyId, onClose }) => {
                 onChange={handleChange}
                 multiline
               />
-              <Input
-                label="Item Code"
-                name="basicInfo.itemCode"
-                value={values.basicInfo.itemCode}
-                onChange={handleChange}
-                error={touched.basicInfo?.itemCode && errors.basicInfo?.itemCode}
-                required
-              />
-              <Input
-                label="Slug"
-                name="basicInfo.slug"
-                value={values.basicInfo.slug}
-                onChange={handleChange}
-                error={touched.basicInfo?.slug && errors.basicInfo?.slug}
-                required
-              />
-              <Input
-                label="Image URL"
-                name="basicInfo.imageUrl"
-                value={values.basicInfo.imageUrl}
-                onChange={handleChange}
-                error={touched.basicInfo?.imageUrl && errors.basicInfo?.imageUrl}
-                placeholder="Enter image URL"
-              />
+              <div className="input-row">
+                <Input
+                  label="Slug"
+                  name="basicInfo.slug"
+                  value={values.basicInfo.slug}
+                  onChange={handleChange}
+                  error={touched.basicInfo?.slug && errors.basicInfo?.slug}
+                  required
+                />
+                <Input
+                  label="Item Code"
+                  name="basicInfo.itemCode"
+                  value={values.basicInfo.itemCode}
+                  onChange={handleChange}
+                  error={touched.basicInfo?.itemCode && errors.basicInfo?.itemCode}
+                  required
+                />
+              </div>
             </div>
-          </Card> */}
+          </Card>
 
           <Card className="form-card">
-            <h3 className="card-title">Groups</h3>
-            <Dropdown
-              label="Select Groups"
-              searchable
-              options={groups || []}
-              value={values.selectedGroups}
-              onChange={(selected) => {
-                setFieldValue('selectedGroups', [...values.selectedGroups, selected]);
-              }}
-            />
+            <div className="section-header">
+              <h3 className="card-title">Media</h3>
+              <Button
+                kind="secondary"
+                onClick={() => {}}
+                className="add-media-btn"
+              >
+                + Add Media
+              </Button>
+            </div>
+            <div className="media-preview">
+              {values.media.length === 0 ? (
+                <div className="empty-media">No media uploaded yet</div>
+              ) : (
+                <div className="media-grid">
+                  {values.media.map((item, index) => (
+                    <div key={index} className="media-item">
+                      <img src={item.url} alt={`Media ${index + 1}`} />
+                      <div className="media-actions">
+                        <Button kind="tertiary" icon={<Icons name="edit" />} />
+                        <Button kind="tertiary" icon={<Icons name="trash" />} />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </Card>
+
+          <Card className="form-card">
+            <div className="component-header">
+              <div>
+                <h3 className="card-title">Component</h3>
+                <p className="card-subtitle">Select all Groups to apply to this bundle</p>
+              </div>
+              <Button kind="secondary" onClick={() => {}} className="add-btn">
+                Add
+              </Button>
+            </div>
 
             {values.selectedGroups.map((group, index) => (
               <GroupTable
-                key={group.value || index}
+                key={`${group.value}-${index}`}
                 group={group}
+                products={productsData[group.value] || []}
                 onRemove={() => {
                   const newGroups = [...values.selectedGroups];
                   newGroups.splice(index, 1);
@@ -183,16 +303,67 @@ const CreateBundle = ({ companyId, onClose }) => {
               />
             ))}
 
-            <Button
-              kind="secondary"
-              onClick={() => {/* Open group selection */}}
-            >
-              Add Another Group
-            </Button>
+            <div className="add-group-section">
+              <div className="add-group-container">
+                <Button
+                  kind="text"
+                  className="add-group-btn"
+                  onClick={() => setShowGroupDropdown(!showGroupDropdown)}
+                >
+                  + Add Group
+                </Button>
 
+                {showGroupDropdown && (
+                  <div className="group-dropdown">
+                    <div className="group-dropdown-header">
+                      <p>Select Group</p>
+                      <div className="group-search">
+                        <Input
+                          placeholder="Pizza"
+                          value={selectedGroupValue}
+                          onChange={(e) => setSelectedGroupValue(e.target.value)}
+                        />
+                        <Button
+                          kind="tertiary"
+                          icon={<Icons name="x" />}
+                          onClick={() => setSelectedGroupValue("")}
+                        />
+                        <Button
+                          kind="tertiary"
+                          icon={<Icons name="chevron-up" />}
+                          onClick={() => setShowGroupDropdown(false)}
+                        />
+                      </div>
+                    </div>
+                    <div className="group-dropdown-options">
+                      {groupOptions
+                        .filter(group =>
+                          group.label.toLowerCase().includes(selectedGroupValue.toLowerCase())
+                        )
+                        .map(group => (
+                          <div
+                            key={group.value}
+                            className="group-option"
+                            onClick={() => {
+                              if (!values.selectedGroups.some(g => g.value === group.value)) {
+                                setFieldValue('selectedGroups', [...values.selectedGroups, group]);
+                              }
+                              setShowGroupDropdown(false);
+                              setSelectedGroupValue("");
+                            }}
+                          >
+                            {group.label}
+                          </div>
+                        ))
+                      }
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
           </Card>
 
-          {/* <Card className="form-card">
+          <Card className="form-card">
             <h3 className="card-title">Indicative Price</h3>
             <div className="form-grid">
               <Input
@@ -214,12 +385,12 @@ const CreateBundle = ({ companyId, onClose }) => {
                 required
               />
             </div>
-          </Card> */}
+          </Card>
 
-          {/* <Card className="form-card">
+          <Card className="form-card">
             <h3 className="card-title">Shipping Details</h3>
             <h4 className="card-subtitle">Packaging Measurements</h4>
-            <div className="form-grid">
+            <div className="form-grid shipping-grid">
               <Input
                 label="Length"
                 type="number"
@@ -253,9 +424,9 @@ const CreateBundle = ({ companyId, onClose }) => {
                 error={touched.shipping?.weight && errors.shipping?.weight}
               />
             </div>
-          </Card> */}
+          </Card>
 
-          {/* <Card className="form-card">
+          <Card className="form-card">
             <h3 className="card-title">Attributes</h3>
             <div className="form-grid">
               <Input
@@ -289,8 +460,8 @@ const CreateBundle = ({ companyId, onClose }) => {
                 onChange={handleChange}
               />
             </div>
-          </Card> */}
-        </Form>
+          </Card>
+        </form>
       )}
     </Formik>
   );

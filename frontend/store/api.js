@@ -11,23 +11,34 @@ export const api = createApi({
       return headers;
     },
   }),
+  tagTypes: ['Bundle', 'Group', 'Product'],
   endpoints: (builder) => ({
     // Groups endpoints
     getGroups: builder.query({
       query: () => 'api/groups',
+      providesTags: ['Group'],
     }),
     getGroupDetails: builder.query({
       query: (groupId) => `api/groups/${groupId}`,
+      providesTags: (result, error, groupId) => [{ type: 'Group', id: groupId }],
     }),
 
     // Products endpoints
     getGroupProducts: builder.query({
       query: (groupId) => `api/groups/${groupId}/products`,
+      providesTags: (result, error, groupId) => [
+        { type: 'Product', id: groupId },
+        'Product',
+      ],
     }),
 
     // Bundles endpoints
     getBundles: builder.query({
-      query: () => 'api/bundles',
+      query: (params) => ({
+        url: 'api/bundles',
+        params,
+      }),
+      providesTags: ['Bundle'],
     }),
     createBundle: builder.mutation({
       query: (bundle) => ({
@@ -35,6 +46,7 @@ export const api = createApi({
         method: 'POST',
         body: bundle,
       }),
+      invalidatesTags: ['Bundle'],
     }),
     updateBundle: builder.mutation({
       query: ({ id, ...bundle }) => ({
@@ -42,6 +54,7 @@ export const api = createApi({
         method: 'PUT',
         body: bundle,
       }),
+      invalidatesTags: ['Bundle'],
     }),
   }),
 });

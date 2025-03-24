@@ -1,0 +1,122 @@
+/* ProductItem.css */
+
+.product-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.product-image {
+    width: 50px;
+    height: 50px;
+    border-radius: 4px;
+    object-fit: cover;
+}
+
+.product-details {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.product-name {
+    font-weight: 500;
+}
+
+.product-size {
+    font-size: 13px;
+    color: #666;
+}
+
+.product-addons {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: #2563eb;
+    cursor: pointer;
+}
+
+.quantity-input {
+    width: 80px;
+    margin: 0 auto;
+}
+
+.price-field {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    justify-content: flex-end;
+}
+
+.currency-dropdown {
+    width: 70px;
+}
+
+.price-input {
+    width: 100px;
+}
+
+/* Add-ons section */
+.addons-container {
+    background-color: #f9fafb;
+    border-bottom: 1px solid #e5e7eb;
+    padding: 0 16px 8px 76px;
+}
+
+.addon-row {
+    display: grid;
+    grid-template-columns: 5fr 2fr 3fr;
+    padding: 8px 0;
+    font-size: 13px;
+    border-bottom: 1px dashed #e5e7eb;
+}
+
+.addon-row:last-child {
+    border-bottom: none;
+}
+
+.addon-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.addon-dot {
+    color: #2563eb;
+    font-size: 16px;
+}
+
+.addon-name {
+    color: #4b5563;
+}
+
+.addon-default-badge {
+    font-size: 11px;
+    background-color: #e5e7eb;
+    color: #4b5563;
+    padding: 2px 6px;
+    border-radius: 10px;
+}
+
+.addon-quantity {
+    text-align: center;
+    color: #4b5563;
+}
+
+.addon-price {
+    text-align: right;
+    color: #4b5563;
+}
+
+@media (max-width: 768px) {
+    .product-info {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+
+    .addons-container {
+        padding-left: 16px;
+    }
+}
