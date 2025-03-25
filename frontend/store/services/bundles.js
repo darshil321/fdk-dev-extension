@@ -18,6 +18,9 @@ export const dynamicBundleApi = createApi({
     getGroups: builder.query({
       query: ({ companyId, applicationId, params = {} }) => ({
         url: `/company/${companyId}/application/${applicationId}/groups`,
+        headers: {
+          "x-company-id": companyId,
+        },
         params: {
           name: params.name || "",
           page_no: params.page_no || 1,
@@ -77,6 +80,9 @@ export const dynamicBundleApi = createApi({
     getBundles: builder.query({
       query: ({ companyId, applicationId, params = {} }) => ({
         url: `/company/${companyId}/application/${applicationId}/combos`,
+        headers: {
+          "x-company-id": companyId,
+        },
         params: {
           name: params.name || "",
           page_no: params.page_no || 1,

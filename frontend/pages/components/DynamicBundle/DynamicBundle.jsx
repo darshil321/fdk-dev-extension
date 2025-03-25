@@ -29,7 +29,7 @@ const DynamicBundle = ({ companyId, applicationId }) => {
     applicationId,
   });
 
-  console.log("groups", groups);
+  console.log("groups mmmmmm", groups);
 
   const bundles = bundlesData?.items || [];
 

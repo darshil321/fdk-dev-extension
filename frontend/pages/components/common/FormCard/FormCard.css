@@ -4,3 +4,10 @@
     border-radius: 16px;
     width: 100%;
 }
+
+.card-container-secondary {
+    padding: 14px;
+    background: var(--grey-color);
+    border-radius: 8px;
+    width: 100%;
+}
