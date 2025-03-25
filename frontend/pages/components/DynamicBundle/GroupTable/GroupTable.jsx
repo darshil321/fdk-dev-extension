@@ -1,11 +1,15 @@
-import React, { useState, useEffect } from 'react';
-import { Button } from 'paul-fds-ui';
-import { Icons } from 'paul-icons-react';
+import React, { useState, useEffect } from "react";
+import { Button, DataTable } from "paul-fds-ui";
+import { Icons } from "paul-icons-react";
 
-
-import './GroupTable.css';
-import { useGetGroupByIdQuery, useGetGroupProductsAddonsMutation } from '@/store/services/bundles';
-import ProductItem from '../ProductItem/ProductItem';
+import "./GroupTable.css";
+import {
+  useGetGroupByIdQuery,
+  useGetGroupProductsAddonsMutation,
+} from "@/store/services/bundles";
+import SvgIcon from "../../Icons/LeftArrow";
+import FormCard from "../../common/FormCard/FormCard";
+import InputField from "../../common/Form/Input/Input";
 
 const GroupTable = ({
   group,
@@ -13,7 +17,7 @@ const GroupTable = ({
   companyId,
   applicationId,
   onProductChange,
-  products: initialProducts = []
+  products: initialProducts = [],
 }) => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -25,7 +29,8 @@ const GroupTable = ({
   );
 
   // Mutation to fetch add-ons for products
-  const [getAddOns, { isLoading: isAddOnsLoading }] = useGetGroupProductsAddonsMutation();
+  const [getAddOns, { isLoading: isAddOnsLoading }] =
+    useGetGroupProductsAddonsMutation();
 
   useEffect(() => {
     const fetchProductsWithAddons = async () => {
@@ -38,7 +43,7 @@ const GroupTable = ({
       if (groupData && groupData.products) {
         try {
           // Extract item_uids from group products
-          const itemUids = groupData.products.map(p => p.item_uid);
+          const itemUids = groupData.products.map((p) => p.item_uid);
 
           if (itemUids.length > 0) {
             // Fetch add-ons for these products
@@ -46,11 +51,11 @@ const GroupTable = ({
               companyId,
               applicationId,
               groupId: group.value,
-              itemUids
+              itemUids,
             }).unwrap();
 
             // Transform and set products with add-ons
-            const productsWithAddons = addonsResult.items.map(item => ({
+            const productsWithAddons = addonsResult.items.map((item) => ({
               id: item.item_uid,
               item_uid: item.item_uid,
               name: item.name || `Product ${item.item_uid}`,
@@ -58,7 +63,7 @@ const GroupTable = ({
               price: item.price || 0,
               quantity: 1,
               addOns: item.add_ons || [],
-              imageUrl: item.image_url || "/api/placeholder/50/50"
+              imageUrl: item.image_url || "/api/placeholder/50/50",
             }));
 
             setProducts(productsWithAddons);
@@ -72,11 +77,18 @@ const GroupTable = ({
     };
 
     fetchProductsWithAddons();
-  }, [groupData, initialProducts, getAddOns, companyId, applicationId, group.value]);
+  }, [
+    groupData,
+    initialProducts,
+    getAddOns,
+    companyId,
+    applicationId,
+    group.value,
+  ]);
 
   // Handle quantity change
   const handleQuantityChange = (productId, value) => {
-    const updatedProducts = products.map(product => {
+    const updatedProducts = products.map((product) => {
       if (product.id === productId || product.item_uid === productId) {
         const updatedProduct = { ...product, quantity: parseInt(value) || 1 };
         return updatedProduct;
@@ -90,7 +102,7 @@ const GroupTable = ({
 
   // Handle price change
   const handlePriceChange = (productId, value) => {
-    const updatedProducts = products.map(product => {
+    const updatedProducts = products.map((product) => {
       if (product.id === productId || product.item_uid === productId) {
         const updatedProduct = { ...product, price: parseFloat(value) || 0 };
         return updatedProduct;
@@ -102,44 +114,67 @@ const GroupTable = ({
     onProductChange(group.value, updatedProducts);
   };
 
-  if (loading || isGroupLoading || isAddOnsLoading) {
-    return <div className="group-table-loading">Loading group products...</div>;
-  }
+  // if (loading || isGroupLoading || isAddOnsLoading) {
+  //   return <div className="group-table-loading">Loading group products...</div>;
+  // }
+  console.log("groupData", groupData);
 
   return (
-    <div className="group-table">
-      <div className="group-header">
-        <h3 className="group-title">{group.label}</h3>
-        <Button
-          kind="tertiary"
-          icon={<Icons name="trash" />}
-          onClick={() => onRemove(group.value)}
-          className="remove-group-btn"
-        />
-      </div>
-
-      {products.length > 0 ? (
-        <div className="product-table">
-          <div className="table-header">
-            <div className="skus-column">SKUs</div>
-            <div className="quantity-column">Quantity</div>
-            <div className="price-column">Selling Price</div>
+    <div className="">
+      <FormCard variant="secondary" style={{ padding: "0px" }}>
+        <div className="group-table">
+          <div className="group-table-header">
+            <p>SKUs</p>
+            <p>Quantity</p>
+            <p>Selling Price</p>
           </div>
 
-          <div className="table-body">
+          <div className="group-table-body">
             {products.map((product) => (
-              <ProductItem
-                key={product.id || product.item_uid}
-                product={product}
-                onQuantityChange={handleQuantityChange}
-                onPriceChange={handlePriceChange}
-              />
+              <div key={product.id || product.item_uid} className="product-row">
+                <div className="product-info">
+                  <img
+                    src={product.imageUrl}
+                    alt={product.name}
+                    className="product-image"
+                  />
+                  <div className="product-name">{product.name}</div>
+                </div>
+
+                <div>
+                  <InputField
+                    type="number"
+                    value={product.quantity}
+                    onChange={(e) =>
+                      handleQuantityChange(
+                        product.id || product.item_uid,
+                        e.target.value
+                      )
+                    }
+                    min="1"
+                    className="quantity-input"
+                  />
+                </div>
+
+                <div>
+                  <InputField
+                    type="number"
+                    value={product.price}
+                    onChange={(e) =>
+                      handlePriceChange(
+                        product.id || product.item_uid,
+                        e.target.value
+                      )
+                    }
+                    min="0"
+                    className="price-input"
+                  />
+                </div>
+              </div>
             ))}
           </div>
         </div>
-      ) : (
-        <div className="empty-products">No products available in this group</div>
-      )}
+      </FormCard>
     </div>
   );
 };

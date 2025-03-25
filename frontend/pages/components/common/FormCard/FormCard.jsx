@@ -1,7 +1,7 @@
 import React from "react";
 import "./FormCard.css";
 
-const FormCard = ({ children, variant = "default" }) => {
+const FormCard = ({ children, variant = "default", style = {} }) => {
   return (
     <div
       className={
@@ -11,6 +11,7 @@ const FormCard = ({ children, variant = "default" }) => {
           ? "card-container-secondary"
           : "card-container"
       }
+      style={style}
     >
       {children}
     </div>

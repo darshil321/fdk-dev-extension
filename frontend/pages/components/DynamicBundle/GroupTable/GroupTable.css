@@ -1,10 +1,8 @@
 /* GroupTable.css */
 
-.group-table {
+/* .group-table {
   border: 1px solid #e5e7eb;
   border-radius: 8px;
-  margin-bottom: 24px;
-  overflow: hidden;
 }
 
 .group-header {
@@ -55,10 +53,11 @@
 
 .product-row {
   display: grid;
-  grid-template-columns: 5fr 2fr 3fr;
+  grid-template-columns: 3fr 2fr 3fr;
   padding: 12px 16px;
   border-bottom: 1px solid #e5e7eb;
   align-items: center;
+  max-width: 100%;
 }
 
 .product-row:last-child {
@@ -84,3 +83,49 @@
     grid-template-columns: 4fr 2fr 3fr;
   }
 }
+
+ */
+
+ .group-table-header {
+  display: grid;
+  grid-template-columns: 7fr 2fr 3fr;
+  border-bottom:  0.5px solid #e5e7eb;
+  font-weight: 500;
+  font-size: 14px;
+  padding: 2px 16px;
+ }
+
+ .group-table {
+  border:  0.5px solid #e5e7eb;
+  border-radius: 12px;
+ }
+
+ .product-info{
+  display: flex;
+  align-items: center;
+  padding: 12px 16px;
+  width: 100%;
+ }
+
+ .product-row {
+  display: grid;
+  grid-template-columns: 7fr 2fr 3fr;
+  border-bottom: 0.5px solid #e5e7eb;
+  align-items: center;
+  max-width: 100%;
+ }
+
+ .product-row:last-child {
+  border-bottom: none;
+
+ }
+
+ .group-table-body {
+background-color: #fff;
+ }
+
+ .product-image {
+  width: 40px;
+  height: 40px;
+  margin-right: 16px;
+ }

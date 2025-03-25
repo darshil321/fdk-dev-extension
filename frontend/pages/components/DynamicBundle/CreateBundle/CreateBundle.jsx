@@ -103,6 +103,8 @@ const CreateBundle = ({ companyId, applicationId, onClose }) => {
   const [selectedGroupValue, setSelectedGroupValue] = useState("");
   const [createBundleMutation, { isLoading }] = useCreateBundleMutation();
   const [localHighlights, setLocalHighlights] = useState([]);
+
+  const [createdGrouops, setCreatedGroups] = useState([]);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const { data: groups = [] } = useGetGroupsQuery();
@@ -407,30 +409,29 @@ const CreateBundle = ({ companyId, applicationId, onClose }) => {
                       }}
                       itemsPerPage={10}
                     />
+                    {values.selectedGroups &&
+                      values.selectedGroups.map((group, index) => (
+                        <GroupTable
+                          key={`${group.value}-${index}`}
+                          group={group}
+                          products={
+                            productsData && productsData[group.value]
+                              ? productsData[group.value]
+                              : []
+                          }
+                          onRemove={() => {
+                            try {
+                              const newGroups = [...values.selectedGroups];
+                              newGroups.splice(index, 1);
+                              setFieldValue("selectedGroups", newGroups);
+                            } catch (err) {
+                              console.error("Error removing group:", err);
+                            }
+                          }}
+                        />
+                      ))}
                   </FormCard>
                 </div>
-
-                {values.selectedGroups &&
-                  values.selectedGroups.map((group, index) => (
-                    <GroupTable
-                      key={`${group.value}-${index}`}
-                      group={group}
-                      products={
-                        productsData && productsData[group.value]
-                          ? productsData[group.value]
-                          : []
-                      }
-                      onRemove={() => {
-                        try {
-                          const newGroups = [...values.selectedGroups];
-                          newGroups.splice(index, 1);
-                          setFieldValue("selectedGroups", newGroups);
-                        } catch (err) {
-                          console.error("Error removing group:", err);
-                        }
-                      }}
-                    />
-                  ))}
 
                 <div className="add-group-section">
                   <div className="add-group-container">
@@ -439,13 +440,13 @@ const CreateBundle = ({ companyId, applicationId, onClose }) => {
                       className="add-group-btn"
                       onClick={(e) => {
                         e.preventDefault();
-                        setShowGroupDropdown(!showGroupDropdown);
+                        // setShowGroupDropdown(!showGroupDropdown);
                       }}
                     >
                       + Add Group
                     </Button>
 
-                    {showGroupDropdown && (
+                    {/* {showGroupDropdown && (
                       <div className="group-dropdown">
                         <div className="group-dropdown-header">
                           <p>Select Group</p>
@@ -503,7 +504,7 @@ const CreateBundle = ({ companyId, applicationId, onClose }) => {
                           ))}
                         </div>
                       </div>
-                    )}
+                    )} */}
                   </div>
                 </div>
               </FormCard>

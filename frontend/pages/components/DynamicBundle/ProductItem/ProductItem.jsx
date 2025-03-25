@@ -1,9 +1,14 @@
-import React, { useState } from 'react';
-import { Input, Dropdown } from 'paul-fds-ui';
-import { Icons } from 'paul-icons-react';
-import './ProductItem.css';
+import React, { useState } from "react";
+import { Input, Dropdown } from "paul-fds-ui";
+import { Icons } from "paul-icons-react";
+import "./ProductItem.css";
 
-const ProductItem = ({ product, onQuantityChange, onPriceChange, currency = "RM" }) => {
+const ProductItem = ({
+  product,
+  onQuantityChange,
+  onPriceChange,
+  currency = "RM",
+}) => {
   const [addOnsOpen, setAddOnsOpen] = useState(false);
 
   return (
@@ -18,14 +23,19 @@ const ProductItem = ({ product, onQuantityChange, onPriceChange, currency = "RM"
             />
             <div className="product-details">
               <div className="product-name">{product.name}</div>
-              <div className="product-size">Size: {product.size || "Regular"}</div>
+              <div className="product-size">
+                Size: {product.size || "Regular"}
+              </div>
               {product.addOns && product.addOns.length > 0 && (
                 <div
                   className="product-addons"
                   onClick={() => setAddOnsOpen(!addOnsOpen)}
                 >
                   <span>{product.addOns.length} Add-Ons</span>
-                  <Icons name={addOnsOpen ? "chevron-up" : "chevron-down"} size={14} />
+                  <Icons
+                    name={addOnsOpen ? "chevron-up" : "chevron-down"}
+                    size={14}
+                  />
                 </div>
               )}
             </div>
@@ -36,7 +46,9 @@ const ProductItem = ({ product, onQuantityChange, onPriceChange, currency = "RM"
           <Input
             type="number"
             value={product.quantity || 1}
-            onChange={(e) => onQuantityChange(product.id || product.item_uid, e.target.value)}
+            onChange={(e) =>
+              onQuantityChange(product.id || product.item_uid, e.target.value)
+            }
             min="1"
             className="quantity-input"
           />
@@ -52,7 +64,9 @@ const ProductItem = ({ product, onQuantityChange, onPriceChange, currency = "RM"
             <Input
               type="number"
               value={product.price || 0}
-              onChange={(e) => onPriceChange(product.id || product.item_uid, e.target.value)}
+              onChange={(e) =>
+                onPriceChange(product.id || product.item_uid, e.target.value)
+              }
               min="0"
               step="0.01"
               className="price-input"
@@ -68,12 +82,18 @@ const ProductItem = ({ product, onQuantityChange, onPriceChange, currency = "RM"
             <div className="addon-row" key={addon.item_uid || index}>
               <div className="addon-info">
                 <span className="addon-dot">•</span>
-                <span className="addon-name">{addon.name || `Add-on ${index + 1}`}</span>
-                {addon.is_default && <span className="addon-default-badge">Default</span>}
+                <span className="addon-name">
+                  {addon.name || `Add-on ${index + 1}`}
+                </span>
+                {addon.is_default && (
+                  <span className="addon-default-badge">Default</span>
+                )}
               </div>
               <div className="addon-quantity">1</div>
               <div className="addon-price">
-                {addon.price ? `+${currency} ${Number(addon.price).toFixed(2)}` : 'Included'}
+                {addon.price
+                  ? `+${currency} ${Number(addon.price).toFixed(2)}`
+                  : "Included"}
               </div>
             </div>
           ))}

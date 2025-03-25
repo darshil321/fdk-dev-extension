@@ -50,7 +50,7 @@
 }
 
 .currency-dropdown {
-    width: 70px;
+    /* width: 70px; */
 }
 
 
@@ -62,8 +62,9 @@
 }
 
 .addon-row {
-    display: grid;
-    grid-template-columns: 5fr 2fr 3fr;
+    display: flex;
+    /* display: grid;
+    grid-template-columns: 5fr 2fr 3fr; */
     padding: 8px 0;
     font-size: 13px;
     border-bottom: 1px dashed #e5e7eb;
