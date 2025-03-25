@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Button, DataTable } from "paul-fds-ui";
+import { Button, DataTable, Dropdown } from "paul-fds-ui";
 import { Icons } from "paul-icons-react";
 
 import "./GroupTable.css";
@@ -124,9 +124,9 @@ const GroupTable = ({
       <FormCard variant="secondary" style={{ padding: "0px" }}>
         <div className="group-table">
           <div className="group-table-header">
-            <p>SKUs</p>
-            <p>Quantity</p>
-            <p>Selling Price</p>
+            <p className="sku-column">SKUs</p>
+            <p className="qty-column"> Quantity</p>
+            <p className="price-column">Selling Price</p>
           </div>
 
           <div className="group-table-body">
@@ -141,7 +141,7 @@ const GroupTable = ({
                   <div className="product-name">{product.name}</div>
                 </div>
 
-                <div>
+                <div className="product-qty">
                   <InputField
                     type="number"
                     value={product.quantity}
@@ -153,21 +153,27 @@ const GroupTable = ({
                     }
                     min="1"
                     className="quantity-input"
+                    style={{}}
                   />
                 </div>
 
-                <div>
+                <div className="product-price">
                   <InputField
-                    type="number"
-                    value={product.price}
-                    onChange={(e) =>
-                      handlePriceChange(
-                        product.id || product.item_uid,
-                        e.target.value
-                      )
+                    onChange={function Ya() {}}
+                    placeholder="0"
+                    prefix={
+                      <Dropdown
+                        onChange={function Ya() {}}
+                        options={[{ name: "RM", value: "RM" }]}
+                        placeholder="RM"
+                        size="m"
+                        style={{ width: "70px" }}
+                        value={{ name: "RM", value: "RM" }}
+                      />
                     }
+                    size="m"
+                    type="Number"
                     min="0"
-                    className="price-input"
                   />
                 </div>
               </div>

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./CreateBundle.css";
 import GroupTable from "../GroupTable/GroupTable";
-import { Button, Input, Menu, MenuItem, SearchInput } from "paul-fds-ui";
+import { Button, Input } from "paul-fds-ui";
 import { Formik } from "formik";
 
 import * as Yup from "yup";
@@ -33,109 +33,31 @@ const validationSchema = Yup.object().shape({
   }),
 });
 
-const defaultGroups = [
-  {
-    meta: {
-      created_by: "",
-      updated_by: "",
-    },
-    _id: "67dbfd446cdbf3c7f2b396ac",
-    name: "Pizza 1",
-    company_id: "9946",
-    application_id: "67d8f2d5aa71f565ebaa879d",
-    products: [
-      {
-        item_uid: 13679061,
-        add_ons: [
-          {
-            is_default: true,
-            item_uid: 13683829,
-          },
-          {
-            is_default: false,
-            item_uid: 13683799,
-          },
-          {
-            is_default: false,
-            item_uid: 13683747,
-          },
-        ],
-      },
-    ],
-    created_at: "2025-03-20T11:34:28.786Z",
-    updated_at: "2025-03-20T11:34:28.786Z",
-  },
-  {
-    meta: {
-      created_by: "",
-      updated_by: "",
-    },
-    _id: "67dbfd446cdbf3c7f2b396ac",
-    name: "Pizza 2",
-    company_id: "9946",
-    application_id: "67d8f2d5aa71f565ebaa879d",
-    products: [
-      {
-        item_uid: 13679061,
-        add_ons: [
-          {
-            is_default: true,
-            item_uid: 13683829,
-          },
-          {
-            is_default: false,
-            item_uid: 13683799,
-          },
-          {
-            is_default: false,
-            item_uid: 13683747,
-          },
-        ],
-      },
-    ],
-    created_at: "2025-03-20T11:34:28.786Z",
-    updated_at: "2025-03-20T11:34:28.786Z",
-  },
-];
-
 const CreateBundle = ({ companyId, applicationId, onClose }) => {
-  const [showGroupDropdown, setShowGroupDropdown] = useState(false);
-  const [selectedGroupValue, setSelectedGroupValue] = useState("");
+  const [showAddGroup, setShowAddGroup] = useState(false);
   const [createBundleMutation, { isLoading }] = useCreateBundleMutation();
   const [localHighlights, setLocalHighlights] = useState([]);
-
-  const [createdGrouops, setCreatedGroups] = useState([]);
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [error, setError] = useState(null);
 
   const { data: groups = [] } = useGetGroupsQuery();
 
-  console.log("groups mmmmmm", groups);
-
-  // Add a new highlight
+  // Highlights management functions
   const addHighlight = () => {
     const newHighlights = [...localHighlights, ""];
     setLocalHighlights(newHighlights);
-    if (onChange) onChange(newHighlights);
   };
 
-  // Update a highlight
   const updateHighlight = (index, value) => {
     const newHighlights = [...localHighlights];
     newHighlights[index] = value;
     setLocalHighlights(newHighlights);
-    if (onChange) onChange(newHighlights);
   };
 
-  // Delete a highlight
   const deleteHighlight = (index) => {
     const newHighlights = [...localHighlights];
     newHighlights.splice(index, 1);
     setLocalHighlights(newHighlights);
-    if (onChange) onChange(newHighlights);
   };
-
-  // Handle errors
-  const [error, setError] = useState(null);
 
   const initialValues = {
     basicInfo: {
@@ -164,30 +86,6 @@ const CreateBundle = ({ companyId, applicationId, onClose }) => {
       gender: "",
     },
     media: [],
-  };
-
-  // Filter groups based on search term with error handling
-  const getFilteredGroups = () => {
-    try {
-      if (!groupOptions || !Array.isArray(groupOptions)) {
-        console.error("groupOptions is not an array:", groupOptions);
-        return [];
-      }
-
-      return groupOptions.filter((group) => {
-        if (!group || typeof group !== "object" || !group.label) {
-          console.error("Invalid group object:", group);
-          return false;
-        }
-
-        return group.label
-          .toLowerCase()
-          .includes((selectedGroupValue || "").toLowerCase());
-      });
-    } catch (err) {
-      console.error("Error filtering groups:", err);
-      return [];
-    }
   };
 
   // Transform form data for API submission
@@ -230,20 +128,13 @@ const CreateBundle = ({ companyId, applicationId, onClose }) => {
       validationSchema={validationSchema}
       onSubmit={async (values, { setSubmitting }) => {
         try {
-          // Clear any previous errors
           setError(null);
-
-          // Transform the data for API
           const bundleData = transformFormData(values);
-
-          // Call the API
           await createBundleMutation({
             companyId,
             applicationId,
             data: bundleData,
           }).unwrap();
-
-          // Close the form on success
           onClose && onClose();
         } catch (error) {
           console.error("Failed to create bundle:", error);
@@ -269,11 +160,7 @@ const CreateBundle = ({ companyId, applicationId, onClose }) => {
 
           <div className="bundle-header">
             <div className="header-left">
-              <div
-                style={{
-                  display: "flex",
-                }}
-              >
+              <div style={{ display: "flex" }}>
                 <Button
                   kind="tertiary"
                   onClick={onClose}
@@ -374,7 +261,6 @@ const CreateBundle = ({ companyId, applicationId, onClose }) => {
                     <h3 className="card-title" style={{ marginBottom: "8px" }}>
                       Component
                     </h3>
-
                     <p className="subtitle">
                       Select all Groups to apply to this bundle
                     </p>
@@ -383,32 +269,41 @@ const CreateBundle = ({ companyId, applicationId, onClose }) => {
 
                 <div style={{ marginTop: "12px" }}>
                   <FormCard variant="secondary">
-                    <SearchableDropdown
-                      label="Select Group"
-                      placeholder="E.g: Saver Pack"
-                      options={groupOptions}
-                      value={selectedGroupValue}
-                      onChange={(option) => {
-                        try {
-                          if (
-                            !values.selectedGroups.some(
-                              (g) => g.value === option.value
-                            )
-                          ) {
-                            setFieldValue("selectedGroups", [
-                              ...values.selectedGroups,
-                              option,
-                            ]);
+                    {/* Render the group selector only when needed */}
+                    {(values.selectedGroups.length === 0 || showAddGroup) && (
+                      <SearchableDropdown
+                        label="Select Group"
+                        placeholder="E.g: Saver Pack"
+                        options={groupOptions}
+                        onChange={(option) => {
+                          try {
+                            // Check if group already exists
+                            if (
+                              !values.selectedGroups.some(
+                                (g) => g.value === option.value
+                              )
+                            ) {
+                              // Add the group to the list
+                              setFieldValue("selectedGroups", [
+                                ...values.selectedGroups,
+                                option,
+                              ]);
+
+                              // Hide the dropdown after selection
+                              setShowAddGroup(false);
+                            }
+                          } catch (err) {
+                            console.error("Error adding group:", err);
                           }
-                        } catch (err) {
-                          console.error("Error adding group:", err);
-                        }
-                      }}
-                      onAddNew={() => {
-                        console.log("Add new group");
-                      }}
-                      itemsPerPage={10}
-                    />
+                        }}
+                        onAddNew={() => {
+                          console.log("Add new group");
+                        }}
+                        itemsPerPage={10}
+                      />
+                    )}
+
+                    {/* Render selected groups as tables */}
                     {values.selectedGroups &&
                       values.selectedGroups.map((group, index) => (
                         <GroupTable
@@ -433,6 +328,7 @@ const CreateBundle = ({ companyId, applicationId, onClose }) => {
                   </FormCard>
                 </div>
 
+                {/* Add Group button - only show when not already selecting */}
                 <div className="add-group-section">
                   <div className="add-group-container">
                     <Button
@@ -440,74 +336,15 @@ const CreateBundle = ({ companyId, applicationId, onClose }) => {
                       className="add-group-btn"
                       onClick={(e) => {
                         e.preventDefault();
-                        // setShowGroupDropdown(!showGroupDropdown);
+                        setShowAddGroup(true);
                       }}
                     >
                       + Add Group
                     </Button>
-
-                    {/* {showGroupDropdown && (
-                      <div className="group-dropdown">
-                        <div className="group-dropdown-header">
-                          <p>Select Group</p>
-                          <div className="group-search">
-                            <Input
-                              placeholder="Pizza"
-                              value={selectedGroupValue}
-                              onChange={(e) =>
-                                setSelectedGroupValue(e.target.value)
-                              }
-                            />
-                            <Button
-                              kind="tertiary"
-                              onClick={(e) => {
-                                e.preventDefault();
-                                setSelectedGroupValue("");
-                              }}
-                            />
-                            <Button
-                              kind="tertiary"
-                              onClick={(e) => {
-                                e.preventDefault();
-                                setShowGroupDropdown(false);
-                              }}
-                            />
-                          </div>
-                        </div>
-                        <div className="group-dropdown-options">
-                          {getFilteredGroups().map((group) => (
-                            <div
-                              key={group.value}
-                              className="group-option"
-                              onClick={(e) => {
-                                e.preventDefault();
-                                try {
-                                  if (
-                                    !values.selectedGroups.some(
-                                      (g) => g.value === group.value
-                                    )
-                                  ) {
-                                    setFieldValue("selectedGroups", [
-                                      ...values.selectedGroups,
-                                      group,
-                                    ]);
-                                  }
-                                  setShowGroupDropdown(false);
-                                  setSelectedGroupValue("");
-                                } catch (err) {
-                                  console.error("Error adding group:", err);
-                                }
-                              }}
-                            >
-                              {group.label}
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    )} */}
                   </div>
                 </div>
               </FormCard>
+
               <FormCard>
                 <div>
                   <h3 className="card-title">Overview</h3>

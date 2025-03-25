@@ -29,8 +29,6 @@ const DynamicBundle = ({ companyId, applicationId }) => {
     applicationId,
   });
 
-  console.log("groups mmmmmm", groups);
-
   const bundles = bundlesData?.items || [];
 
   // Show loading state

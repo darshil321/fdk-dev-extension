@@ -1,14 +1,17 @@
 :root {
-    --primary-color: #3535F3;
-    --background-color-primary: #ffff;
-    --background-color-secondary: #f5f5f5;
-    --grey-color: #FAFAFA;
-    --text-color: #000;
+  --primary-color: #3535f3;
+  --background-color-primary: #ffff;
+  --background-color-secondary: #f5f5f5;
+  --grey-color: #fafafa;
+  --text-color: #000;
 }
 
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
-  
+
+.fds-number-input-button {
+  display: none !important;
+}

@@ -23,7 +23,6 @@ export const Home = () => {
     isApplicationLaunch() ? fetchApplicationProducts() : fetchProducts();
   }, [application_id]);
 
-
   console.log("application_id", application_id, company_id, window.location);
 
   const fetchProducts = async () => {
@@ -48,6 +47,7 @@ export const Home = () => {
   const fetchApplicationProducts = async () => {
     setPageLoading(true);
     try {
+      console.log("EXAMPLE_MAIN_URL", EXAMPLE_MAIN_URL);
       const { data } = await axios.get(
         urlJoin(
           EXAMPLE_MAIN_URL,
@@ -59,6 +59,7 @@ export const Home = () => {
           },
         }
       );
+
       setProductList(data.items);
     } catch (e) {
       console.error("Error fetching application products:", e);
