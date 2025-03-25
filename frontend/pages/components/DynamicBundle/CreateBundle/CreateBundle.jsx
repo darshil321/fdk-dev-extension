@@ -2,13 +2,13 @@ import React, { useState } from "react";
 import "./CreateBundle.css";
 import GroupTable from "../GroupTable/GroupTable";
 import { Button, Input } from "paul-fds-ui";
-import { Icons } from "paul-icons-react";
 import { Formik } from "formik";
 
 import * as Yup from "yup";
 import { useCreateBundleMutation } from "@/store/api";
 import FormCard from "../../common/FormCard/FormCard";
 import { groupOptions, productsData } from "@/constants/data";
+import SvgIcon from "../../Icons/LeftArrow";
 
 const validationSchema = Yup.object().shape({
   basicInfo: Yup.object().shape({
@@ -181,7 +181,7 @@ const CreateBundle = ({ companyId, applicationId, onClose }) => {
                 <Button
                   kind="secondary"
                   onClick={onClose}
-                  icon={<Icons name="arrow-left" />}
+                  icon={<SvgIcon name="arrow-left" />}
                 />
               </div>
               <h2>Bundle</h2>
@@ -278,7 +278,7 @@ const CreateBundle = ({ companyId, applicationId, onClose }) => {
                     </p>
                   </div>
                   <Button
-                    kind="secondary"
+                    kind="tertiary"
                     onClick={() => {}}
                     className="add-btn"
                   >
@@ -309,7 +309,7 @@ const CreateBundle = ({ companyId, applicationId, onClose }) => {
                       kind="text"
                       className="add-group-btn"
                       onClick={(e) => {
-                        e.preventDefault(); // Prevent form submission
+                        e.preventDefault();
                         setShowGroupDropdown(!showGroupDropdown);
                       }}
                     >
@@ -330,7 +330,7 @@ const CreateBundle = ({ companyId, applicationId, onClose }) => {
                             />
                             <Button
                               kind="tertiary"
-                              icon={<Icons name="x" />}
+
                               onClick={(e) => {
                                 e.preventDefault();
                                 setSelectedGroupValue("");
@@ -338,7 +338,7 @@ const CreateBundle = ({ companyId, applicationId, onClose }) => {
                             />
                             <Button
                               kind="tertiary"
-                              icon={<Icons name="chevron-up" />}
+
                               onClick={(e) => {
                                 e.preventDefault();
                                 setShowGroupDropdown(false);

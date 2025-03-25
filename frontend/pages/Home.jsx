@@ -23,6 +23,9 @@ export const Home = () => {
     isApplicationLaunch() ? fetchApplicationProducts() : fetchProducts();
   }, [application_id]);
 
+
+  console.log("application_id", application_id, company_id, window.location);
+
   const fetchProducts = async () => {
     setPageLoading(true);
     try {
