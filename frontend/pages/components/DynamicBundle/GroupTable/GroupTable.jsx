@@ -130,7 +130,7 @@ const GroupTable = ({
           </div>
 
           <div className="group-table-body">
-            {products.map((product) => (
+            {products?.map((product) => (
               <div key={product.id || product.item_uid} className="product-row">
                 <div className="product-info">
                   <img
