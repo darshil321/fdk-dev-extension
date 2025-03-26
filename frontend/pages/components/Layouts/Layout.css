@@ -1,10 +1,10 @@
 .layout {
-    display: flex;
-    margin: 24px;
-    gap: 2px;
+  display: flex;
+  margin: 24px;
+  gap: 2px;
 }
 
 .main-content {
-    background-color: #f8f8f8;
-    flex: 1;
+  background-color: #f5f5f5;
+  flex: 1;
 }

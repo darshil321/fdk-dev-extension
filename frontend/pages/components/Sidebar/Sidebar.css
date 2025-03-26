@@ -23,7 +23,7 @@
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  gap: 4px
+  gap: 4px;
 }
 
 .tab.active {

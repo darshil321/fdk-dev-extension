@@ -1,16 +1,32 @@
 .empty-bundle-state {
   text-align: center;
-  padding: 48px 24px;
-  max-width: 600px;
-  margin: 48px auto;
+
+  min-height: 100vh;
+  background-color: var(--background-color-primary);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.empty-bundle-state-content {
+  max-width: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .empty-bundle-state h2 {
   font-size: 24px;
-  margin-bottom: 16px;
+  margin-top: 40px;
 }
 
 .empty-bundle-state p {
-  color: var(--text-secondary);
-  margin-bottom: 24px;
+  color: var(--text-color);
+  opacity: 0.65;
+  line-height: 24px;
+  font-size: 16px;
+  margin-top: 16px;
+  margin-bottom: 16px;
 }
