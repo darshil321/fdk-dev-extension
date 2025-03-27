@@ -22,8 +22,8 @@ const validationSchema = Yup.object().shape({
     imageUrl: Yup.string().url("Must be a valid URL"),
   }),
   pricing: Yup.object().shape({
-    actualPrice: Yup.number().required("Actual price is required"),
-    sellingPrice: Yup.number().required("Selling price is required"),
+    actualPrice: Yup.number().positive("Must be positive"),
+    sellingPrice: Yup.number().positive("Must be positive"),
   }),
   shipping: Yup.object().shape({
     length: Yup.number().positive("Must be positive"),
