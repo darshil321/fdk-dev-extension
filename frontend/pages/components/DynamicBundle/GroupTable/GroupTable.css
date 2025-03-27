@@ -46,6 +46,7 @@
     align-items: center;
     background-color: #fff;
     padding: 2px 12px;
+    justify-items: space-between;
 }
 
 .product-row:last-child {
@@ -91,4 +92,5 @@
 .product-price {
     width: 25%;
     text-align: right;
+    margin-left: 10px;
 }
