@@ -3,8 +3,8 @@ import { Icons } from "paul-icons-react";
 import { useEffect, useState } from "react";
 
 import {
-    useGetGroupByIdQuery,
-    useGetGroupProductsAddonsMutation,
+  useGetGroupByIdQuery,
+  useGetGroupProductsAddonsMutation,
 } from "@/store/services/bundles";
 import InputField from "../../common/Form/Input/Input";
 import FormCard from "../../common/FormCard/FormCard";
@@ -26,8 +26,7 @@ const GroupTable = ({
     { skip: !group.value || initialProducts.length > 0 }
   );
 
-  const [getAddOns] =
-    useGetGroupProductsAddonsMutation();
+  const [getAddOns] = useGetGroupProductsAddonsMutation();
 
   useEffect(() => {
     const fetchProductsWithAddons = async () => {
@@ -81,14 +80,14 @@ const GroupTable = ({
   ]);
 
   const toggleAddOns = (productId) => {
-    setExpandedProducts(prev => ({
+    setExpandedProducts((prev) => ({
       ...prev,
-      [productId]: !prev[productId]
+      [productId]: !prev[productId],
     }));
   };
 
   const handleQuantityChange = (productId, value) => {
-    const updatedProducts = products.map(product => {
+    const updatedProducts = products.map((product) => {
       if (product.id === productId || product.item_uid === productId) {
         return { ...product, quantity: parseInt(value) || 1 };
       }
@@ -98,7 +97,6 @@ const GroupTable = ({
     setProducts(updatedProducts);
     onProductChange && onProductChange(group.value, updatedProducts);
   };
-
 
   return (
     <div className="group-table-container">
@@ -121,15 +119,23 @@ const GroupTable = ({
                   />
                   <div className="product-details">
                     <div className="product-name">{product.name}</div>
-                    <div className="product-size">Size: {product.size || "Regular"}</div>
+                    <div className="product-size">
+                      Size: {product.size || "Regular"}
+                    </div>
                     {product.addOns && product.addOns.length > 0 && (
                       <div
                         className="product-addons"
-                        onClick={() => toggleAddOns(product.id || product.item_uid)}
+                        onClick={() =>
+                          toggleAddOns(product.id || product.item_uid)
+                        }
                       >
                         <span>{product.addOns.length} Add-Ons</span>
                         <Icons
-                          name={expandedProducts[product.id || product.item_uid] ? "chevron-up" : "chevron-down"}
+                          name={
+                            expandedProducts[product.id || product.item_uid]
+                              ? "chevron-up"
+                              : "chevron-down"
+                          }
                           size={14}
                         />
                       </div>
@@ -141,8 +147,13 @@ const GroupTable = ({
                   <Input
                     type="number"
                     value={product.quantity || 1}
-                    onChange={(e) => handleQuantityChange(product.id || product.item_uid, e.target.value)}
-                    min="1"
+                    onChange={(e) =>
+                      handleQuantityChange(
+                        product.id || product.item_uid,
+                        e.target.value
+                      )
+                    }
+                    min="0"
                     className="quantity-input"
                   />
                 </div>
