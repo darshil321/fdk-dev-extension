@@ -50,7 +50,6 @@ const AddMediaModal = ({ isOpen, onClose, onAdd }) => {
 };
 
 const MediaSection = ({ media = [], onMediaChange }) => {
-  const [isRearranging, setIsRearranging] = useState(false);
   const [draggedIndex, setDraggedIndex] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -137,9 +136,9 @@ const MediaSection = ({ media = [], onMediaChange }) => {
                 <div
                   key={index}
                   className={`media-item ${draggedIndex === index ? 'dragging' : ''}`}
-                  draggable={isRearranging}
-                  onDragStart={(e) => isRearranging && handleDragStart(e, index)}
-                  onDragOver={(e) => isRearranging && handleDragOver(e, index)}
+                  draggable={true}
+                  onDragStart={(e) => handleDragStart(e, index)}
+                  onDragOver={(e) => handleDragOver(e, index)}
                   onDragEnd={handleDragEnd}
                 >
                   <img
@@ -147,45 +146,16 @@ const MediaSection = ({ media = [], onMediaChange }) => {
                     alt={item.alt || `Media ${index + 1}`}
                     onError={handleImageError}
                   />
-
-                  {isRearranging && (
-                    <div className="media-item-overlay">
-                      <Button
-                        kind="tertiary"
-                        icon={<SvgIcon name="trash" />}
-                        onClick={() => deleteMedia(index)}
-                        className="delete-media-btn"
-                      />
-                    </div>
-                  )}
+                  <div className="media-item-overlay">
+                    <Button
+                      kind="tertiary"
+                      icon={<SvgIcon name="trash" />}
+                      onClick={() => deleteMedia(index)}
+                      className="delete-media-btn"
+                    />
+                  </div>
                 </div>
               ))}
-            </div>
-
-            <div className="rearrange-container">
-              <Button
-                type="button"
-                kind="secondary"
-                onClick={(e) => {
-                   e.preventDefault()
-                  setIsRearranging(!isRearranging);
-               }}
-                className="rearrange-btn"
-              >
-                <div className="rearrange-content">
-                  {isRearranging ? (
-                    <>
-                      <SvgIcon name="check" />
-                      <span>Done</span>
-                    </>
-                  ) : (
-                    <>
-                      <SvgIcon name="move" />
-                      <span>Rearrange</span>
-                    </>
-                  )}
-                </div>
-              </Button>
             </div>
           </>
         )}
