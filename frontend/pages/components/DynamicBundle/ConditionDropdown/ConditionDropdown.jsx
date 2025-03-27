@@ -2,19 +2,22 @@ import React from 'react';
 import { Dropdown } from 'paul-fds-ui';
 import './ConditionDropdown.css';
 
-const ConditionDropdown = ({ value = 'AND', onChange }) => {
+const ConditionDropdown = () => {
   const options = [
-    { label: 'AND', value: 'AND' },
-    { label: 'OR', value: 'OR' }
+    { name: 'AND', value: 'AND' },
+    { name: 'OR', value: 'OR' }
   ];
+
+  const [selected, setSelected] = React.useState(options[0]);
 
   return (
     <div className="condition-dropdown-container">
       <Dropdown
         className="condition-dropdown"
         options={options}
-        value={value}
-        onChange={onChange || (() => {})}
+        value={selected.value}
+        onChange={(option) => setSelected(option.value)}
+        placeholder="Select condition"
       />
     </div>
   );
