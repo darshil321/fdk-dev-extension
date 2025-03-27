@@ -1,0 +1,24 @@
+.condition-dropdown-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 16px 0;
+    position: relative;
+}
+
+.condition-dropdown {
+    width: 120px;
+    z-index: 1;
+    background-color: white;
+}
+
+.condition-dropdown-container::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background-color: #e5e7eb;
+    z-index: 0;
+}

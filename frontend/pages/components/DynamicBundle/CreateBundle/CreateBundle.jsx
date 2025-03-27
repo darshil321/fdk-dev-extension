@@ -1,17 +1,17 @@
 import React, { useState } from "react";
 import "./CreateBundle.css";
 import GroupTable from "../GroupTable/GroupTable";
-import { Button, Input } from "paul-fds-ui";
+import { Button } from "paul-fds-ui";
 import { Formik } from "formik";
-
 import * as Yup from "yup";
 import { useCreateBundleMutation } from "@/store/api";
 import FormCard from "../../common/FormCard/FormCard";
 import { groupOptions, productsData } from "@/constants/data";
 import SvgIcon from "../../Icons/LeftArrow";
 import InputField from "../../common/Form/Input/Input";
-import { useGetGroupsQuery } from "@/store/services/bundles";
 import SearchableDropdown from "../../common/Form/AutoCompleteDropdown/AutoCompleteDropdown";
+import ConditionDropdown from "../ConditionDropdown/ConditionDropdown";
+import MediaSection from "../MediaSection/MediaSection";
 
 const validationSchema = Yup.object().shape({
   basicInfo: Yup.object().shape({
@@ -39,9 +39,7 @@ const CreateBundle = ({ companyId, applicationId, onClose }) => {
   const [localHighlights, setLocalHighlights] = useState([]);
   const [error, setError] = useState(null);
 
-  const { data: groups = [] } = useGetGroupsQuery();
 
-  // Highlights management functions
   const addHighlight = () => {
     const newHighlights = [...localHighlights, ""];
     setLocalHighlights(newHighlights);
@@ -68,6 +66,7 @@ const CreateBundle = ({ companyId, applicationId, onClose }) => {
       imageUrl: "",
     },
     selectedGroups: [],
+    groupConditions: {},
     pricing: {
       actualPrice: "",
       sellingPrice: "",
@@ -88,20 +87,29 @@ const CreateBundle = ({ companyId, applicationId, onClose }) => {
     media: [],
   };
 
-  // Transform form data for API submission
   const transformFormData = (values) => {
     try {
-      // Create components from selected groups
-      const components = values.selectedGroups.map((group) => ({
-        name: group.label,
-        type: "node",
-        group: group.value,
-        products: (productsData[group.value] || []).map((product) => ({
-          item_uid: product.id,
-          price: parseFloat(product.price) || 0,
-          quantity: 1,
-        })),
-      }));
+      const components = [];
+
+      values.selectedGroups.forEach((group, index) => {
+        components.push({
+          name: group.label,
+          type: "node",
+          group: group.value,
+          products: (productsData[group.value] || []).map((product) => ({
+            item_uid: product.id,
+            price: parseFloat(product.price) || 0,
+            quantity: 1,
+          })),
+        });
+
+        if (index < values.selectedGroups.length - 1) {
+          components.push({
+            name: values.groupConditions[index] || "AND",
+            type: "condition",
+          });
+        }
+      });
 
       return {
         name: values.basicInfo.name,
@@ -109,6 +117,7 @@ const CreateBundle = ({ companyId, applicationId, onClose }) => {
         slug: values.basicInfo.slug,
         short_description: values.basicInfo.description,
         components: components,
+        highlights: localHighlights.filter(h => h.trim() !== ""),
         indicative_price: {
           selling_price: parseFloat(values.pricing.sellingPrice) || 0,
           actual_price: parseFloat(values.pricing.actualPrice) || 0,
@@ -226,33 +235,12 @@ const CreateBundle = ({ companyId, applicationId, onClose }) => {
                     />
                   </div>
                 </div>
-                <div className="section-header">
-                  <h3 className="card-title">Media</h3>
-                  <Button
-                    kind="secondary"
-                    onClick={() => {}}
-                    className="add-media-btn"
-                  >
-                    + Add Media
-                  </Button>
-                </div>
-                <div className="media-preview">
-                  {!values.media || values.media.length === 0 ? (
-                    <div className="empty-media">No media uploaded yet</div>
-                  ) : (
-                    <div className="media-grid">
-                      {values.media.map((item, index) => (
-                        <div key={index} className="media-item">
-                          <img src={item.url} alt={`Media ${index + 1}`} />
-                          <div className="media-actions">
-                            <Button kind="tertiary">Edit</Button>
-                            <Button kind="tertiary">Remove</Button>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
+                <MediaSection
+                    media={values.media || []}
+                    onMediaChange={(updatedMedia) => {
+                      setFieldValue('media', updatedMedia);
+                    }}
+                  />
               </FormCard>
 
               <FormCard>
@@ -269,28 +257,15 @@ const CreateBundle = ({ companyId, applicationId, onClose }) => {
 
                 <div style={{ marginTop: "12px" }}>
                   <FormCard variant="secondary">
-                    {/* Render the group selector only when needed */}
-                    {(values.selectedGroups.length === 0 || showAddGroup) && (
+                    {values.selectedGroups.length === 0 && (
                       <SearchableDropdown
                         label="Select Group"
                         placeholder="E.g: Saver Pack"
                         options={groupOptions}
                         onChange={(option) => {
                           try {
-                            // Check if group already exists
-                            if (
-                              !values.selectedGroups.some(
-                                (g) => g.value === option.value
-                              )
-                            ) {
-                              // Add the group to the list
-                              setFieldValue("selectedGroups", [
-                                ...values.selectedGroups,
-                                option,
-                              ]);
-
-                              // Hide the dropdown after selection
-                              setShowAddGroup(false);
+                            if (!values.selectedGroups.some(g => g.value === option.value)) {
+                              setFieldValue("selectedGroups", [option]);
                             }
                           } catch (err) {
                             console.error("Error adding group:", err);
@@ -303,9 +278,8 @@ const CreateBundle = ({ companyId, applicationId, onClose }) => {
                       />
                     )}
 
-                    {/* Render selected groups as tables */}
-                    {values.selectedGroups &&
-                      values.selectedGroups.map((group, index) => (
+                    {values.selectedGroups.map((group, index) => (
+                      <React.Fragment key={`group-${index}`}>
                         <GroupTable
                           key={`${group.value}-${index}`}
                           group={group}
@@ -319,30 +293,76 @@ const CreateBundle = ({ companyId, applicationId, onClose }) => {
                               const newGroups = [...values.selectedGroups];
                               newGroups.splice(index, 1);
                               setFieldValue("selectedGroups", newGroups);
+
+                              if (index < values.selectedGroups.length - 1) {
+                                const newConditions = { ...values.groupConditions };
+                                for (let i = index; i < values.selectedGroups.length - 1; i++) {
+                                  newConditions[i] = newConditions[i + 1];
+                                }
+                                delete newConditions[values.selectedGroups.length - 2];
+                                setFieldValue("groupConditions", newConditions);
+                              }
                             } catch (err) {
                               console.error("Error removing group:", err);
                             }
                           }}
                         />
-                      ))}
+
+                        {index < values.selectedGroups.length - 1 && (
+                          <ConditionDropdown
+                            value={values.groupConditions[index] || "AND"}
+                            onChange={(value) => {
+                              const newConditions = { ...values.groupConditions };
+                              newConditions[index] = value;
+                              setFieldValue("groupConditions", newConditions);
+                            }}
+                          />
+                        )}
+                      </React.Fragment>
+                    ))}
+
+                    {values.selectedGroups.length > 0 && showAddGroup && (
+                      <div className="add-group-dropdown">
+                        <SearchableDropdown
+                          label="Select Group"
+                          placeholder="E.g: Saver Pack"
+                          options={groupOptions.filter(option =>
+                            !values.selectedGroups.some(g => g.value === option.value)
+                          )}
+                          onChange={(option) => {
+                            try {
+                              if (!values.selectedGroups.some(g => g.value === option.value)) {
+                                setFieldValue("selectedGroups", [...values.selectedGroups, option]);
+                                setShowAddGroup(false);
+                              }
+                            } catch (err) {
+                              console.error("Error adding group:", err);
+                            }
+                          }}
+                          onCancel={() => setShowAddGroup(false)}
+                          itemsPerPage={10}
+                        />
+                      </div>
+                    )}
                   </FormCard>
                 </div>
 
-                {/* Add Group button - only show when not already selecting */}
-                <div className="add-group-section">
-                  <div className="add-group-container">
-                    <Button
-                      kind="tertiary"
-                      className="add-group-btn"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        setShowAddGroup(true);
-                      }}
-                    >
-                      + Add Group
-                    </Button>
+                {values.selectedGroups.length > 0 && !showAddGroup && (
+                  <div className="add-group-section">
+                    <div className="add-group-container">
+                      <Button
+                        kind="tertiary"
+                        className="add-group-btn"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          setShowAddGroup(true);
+                        }}
+                      >
+                        + Add Group
+                      </Button>
+                    </div>
                   </div>
-                </div>
+                )}
               </FormCard>
 
               <FormCard>

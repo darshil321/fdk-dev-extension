@@ -1,8 +1,8 @@
-import React, { useState, useEffect, useRef } from "react";
-import { Input, Button } from "paul-fds-ui";
+import { useState, useEffect, useRef } from "react";
+import { Input } from "paul-fds-ui";
 import SvgIcon from "@/pages/components/Icons/LeftArrow";
 
-// CSS for the Searchable Dropdown component
+
 const dropdownStyles = `
 .dropdown-container {
   position: relative;
@@ -138,9 +138,7 @@ const SearchableDropdown = ({
   label = "Select Group",
   placeholder = "E.g: Saver Pack",
   options = [],
-  value = null,
   onChange,
-  onAddNew,
   itemsPerPage = 10,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -149,12 +147,12 @@ const SearchableDropdown = ({
   const dropdownRef = useRef(null);
   const inputRef = useRef(null);
 
-  // Filter options based on search term
+
   const filteredOptions = options.filter((option) =>
     option.label.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  // Calculate pagination
+
   const totalPages = Math.ceil(filteredOptions.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const paginatedOptions = filteredOptions.slice(
@@ -162,34 +160,34 @@ const SearchableDropdown = ({
     startIndex + itemsPerPage
   );
 
-  // Handle dropdown toggle
+
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
     if (!isOpen && inputRef.current) {
-      // Focus the input when opening the dropdown
+
       inputRef.current.focus();
     }
   };
 
-  // Handle option selection
+
   const handleSelect = (option) => {
     onChange(option);
-    setSearchTerm(""); // Clear search term
+    setSearchTerm("");
     setIsOpen(false);
   };
 
-  // Handle search input change
+
   const handleSearchChange = (e) => {
     setSearchTerm(e.target.value);
-    setCurrentPage(1); // Reset to first page on search
+    setCurrentPage(1);
 
-    // Open dropdown when typing
+
     if (!isOpen && e.target.value.trim().length > 0) {
       setIsOpen(true);
     }
   };
 
-  // Clear search
+
   const clearSearch = () => {
     setSearchTerm("");
     if (inputRef.current) {
@@ -197,12 +195,12 @@ const SearchableDropdown = ({
     }
   };
 
-  // Handle pagination
+
   const goToPage = (page) => {
     setCurrentPage(page);
   };
 
-  // Handle clicking outside to close dropdown
+
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {

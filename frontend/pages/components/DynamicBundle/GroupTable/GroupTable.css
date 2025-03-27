@@ -1,159 +1,94 @@
-/* GroupTable.css */
-
-/* .group-table {
-  border: 1px solid #e5e7eb;
-  border-radius: 8px;
-}
-
-.group-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 12px 16px;
-  background-color: #f9fafb;
-  border-bottom: 1px solid #e5e7eb;
-}
-
-.group-title {
-  margin: 0;
-  font-size: 16px;
-  font-weight: 500;
-}
-
-.remove-group-btn {
-  color: #ef4444;
-}
-
-.table-header {
-  display: grid;
-  grid-template-columns: 5fr 2fr 3fr;
-  padding: 10px 16px;
-  background-color: #f9fafb;
-  border-bottom: 1px solid #e5e7eb;
-  font-weight: 500;
-  font-size: 14px;
-}
-
-.skus-column {
-  text-align: left;
-}
-
-.quantity-column {
-  text-align: center;
-}
-
-.price-column {
-  text-align: right;
-}
-
-.table-body {
-  max-height: 500px;
-  overflow-y: auto;
-}
-
-.product-row {
-  display: grid;
-  grid-template-columns: 3fr 2fr 3fr;
-  padding: 12px 16px;
-  border-bottom: 1px solid #e5e7eb;
-  align-items: center;
-  max-width: 100%;
-}
-
-.product-row:last-child {
-  border-bottom: none;
-}
-
-.empty-products {
-  padding: 24px;
-  text-align: center;
-  color: #666;
-  font-style: italic;
-}
-
-.group-table-loading {
-  padding: 24px;
-  text-align: center;
-  color: #666;
-}
-
-@media (max-width: 768px) {
-  .table-header,
-  .product-row {
-    grid-template-columns: 4fr 2fr 3fr;
-  }
-}
-
- */
-
 .group-table-header {
-  display: flex;
-  /* grid-template-columns: 7fr 2fr 3fr;
-  border-bottom:  0.5px solid #e5e7eb; */
-  justify-content: space-between;
-  align-items: center;
-  font-weight: 500;
-  font-size: 14px;
-  padding: 2px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 500;
+    font-size: 14px;
+    padding: 2px 16px;
+}
+
+.group-table-container {
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 24px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 .sku-column {
-  text-align: left;
-  width: 60%;
+    text-align: left;
+    width: 60%;
 }
 .qty-column {
-  text-align: left;
-  width: 10%;
+    text-align: left;
+    width: 10%;
 }
 .price-column {
-  text-align: center;
-  width: 30%;
+    text-align: center;
+    width: 30%;
 }
 
 .group-table {
-  border: 0.5px solid #e5e7eb;
-  border-radius: 12px;
+    border: 0.5px solid #e5e7eb;
+    border-radius: 12px;
 }
 
 .product-info {
-  display: flex;
-  width: 60%;
-  align-items: center;
-  padding: 12px 16px;
+    display: flex;
+    width: 60%;
+    align-items: center;
+    padding: 12px 16px;
 }
 
 .product-row {
-  display: flex;
-  max-width: 100%;
-  border-bottom: 0.5px solid #e5e7eb;
-  align-items: center;
-  background-color: #fff;
-  padding: 2px 12px;
+    display: flex;
+    max-width: 100%;
+    border-bottom: 0.5px solid #e5e7eb;
+    align-items: center;
+    background-color: #fff;
+    padding: 2px 12px;
 }
 
 .product-row:last-child {
-  border-bottom: 0px;
+    border-bottom: 0px;
+}
+
+.add-group-button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #2563eb;
+    background: none;
+    border: none;
+    padding: 8px 12px;
+    cursor: pointer;
+    font-weight: 500;
+    margin-top: 16px;
+}
+
+.add-group-button:hover {
+    background-color: rgba(37, 99, 235, 0.05);
+    border-radius: 4px;
 }
 
 .group-table-body {
-  overflow: hidden;
+    overflow: hidden;
 }
 
 .product-image {
-  width: 40px;
-  height: 40px;
-  margin-right: 16px;
+    width: 40px;
+    height: 40px;
+    margin-right: 16px;
 }
 
 .product-qty {
-  width: 15%;
-  text-align: center;
-  margin-right: 16px;
-  display: flex;
-  justify-content: center;
+    width: 15%;
+    text-align: center;
+    margin-right: 16px;
+    display: flex;
+    justify-content: center;
 }
 
 .product-price {
-  width: 25%;
-  text-align: right;
+    width: 25%;
+    text-align: right;
 }

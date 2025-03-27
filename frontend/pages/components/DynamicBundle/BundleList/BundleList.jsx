@@ -1,13 +1,10 @@
-
-import React, { useState } from 'react';
-
-
-import './BundleList.css';
-import { useDispatch } from 'react-redux';
-import { Button, Dropdown, SearchInput } from 'paul-fds-ui';
-import Table from '../../common/Table/Table';
+import { useState } from 'react';
 import { useGetBundlesQuery } from '@/store/api';
 import { setIsCreating } from '@/store/slices/bundlesSlice';
+import { Button, Dropdown, SearchInput } from 'paul-fds-ui';
+import { useDispatch } from 'react-redux';
+import Table from '../../common/Table/Table';
+import './BundleList.css';
 
 const BundlesList = () => {
   const [searchQuery, setSearchQuery] = useState('');

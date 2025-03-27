@@ -1,23 +1,17 @@
-import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
-import "./style/home.css";
-import DEFAULT_NO_IMAGE from "../public/assets/default_icon_listing.png";
-import loaderGif from "../public/assets/loader.gif";
 import axios from "axios";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import urlJoin from "url-join";
+import loaderGif from "../public/assets/loader.gif";
 import Layout from "./components/Layouts/Layout";
+import "./style/home.css";
 
 const EXAMPLE_MAIN_URL = window.location.origin;
 
 export const Home = () => {
   const [pageLoading, setPageLoading] = useState(false);
-  const [productList, setProductList] = useState([]);
-  const DOC_URL_PATH =
-    "/help/docs/sdk/latest/platform/company/catalog/#getProducts";
-  const DOC_APP_URL_PATH =
-    "/help/docs/sdk/latest/platform/application/catalog#getAppProducts";
+  const [ setProductList] = useState([]);
   const { application_id, company_id } = useParams();
-  const documentationUrl = "https://api.fynd.com";
 
   useEffect(() => {
     isApplicationLaunch() ? fetchApplicationProducts() : fetchProducts();
@@ -68,19 +62,7 @@ export const Home = () => {
     }
   };
 
-  const productProfileImage = (media) => {
-    if (!media || !media.length) {
-      return DEFAULT_NO_IMAGE;
-    }
-    const profileImg = media.find((m) => m.type === "image");
-    return profileImg?.url || DEFAULT_NO_IMAGE;
-  };
 
-  const getDocumentPageLink = () => {
-    return documentationUrl
-      .replace("api", "partners")
-      .concat(isApplicationLaunch() ? DOC_APP_URL_PATH : DOC_URL_PATH);
-  };
 
   const isApplicationLaunch = () => !!application_id;
 

@@ -19,7 +19,7 @@ const Table = ({
     direction: 'asc'
   });
 
-  // Handle row selection
+
   const handleSelectRow = (rowId) => {
     const newSelection = selectedRows.includes(rowId)
       ? selectedRows.filter(id => id !== rowId)
@@ -29,7 +29,7 @@ const Table = ({
     onSelectionChange?.(newSelection);
   };
 
-  // Handle select all
+
   const handleSelectAll = () => {
     const allRowIds = data.map(row => row.id);
     const newSelection = selectedRows.length === data.length ? [] : allRowIds;
@@ -38,7 +38,7 @@ const Table = ({
     onSelectionChange?.(newSelection);
   };
 
-  // Handle sorting
+
   const handleSort = (key) => {
     if (!sortable) return;
 
@@ -49,7 +49,7 @@ const Table = ({
     setSortConfig({ key, direction });
   };
 
-  // Sort data
+
   const sortedData = React.useMemo(() => {
     if (!sortConfig.key) return data;
 
@@ -109,13 +109,6 @@ const Table = ({
                     {column.Header}
                     {sortable && column.sortable !== false && (
                       <div className="sort-icons">
-                        {/* <Icons
-                          name={sortConfig.key === column.accessor && sortConfig.direction === 'asc'
-                            ? 'arrow-up-filled'
-                            : 'arrow-up'
-                          }
-                          size="small"
-                        /> */}
                       </div>
                     )}
                   </div>
@@ -129,7 +122,6 @@ const Table = ({
               <tr>
                 <td colSpan={columns.length + (selectable ? 1 : 0)} className="loading-cell">
                   <div className="loading-indicator">
-                    {/* <Icons size="small" /> */}
                     <span>Loading...</span>
                   </div>
                 </td>
@@ -138,7 +130,6 @@ const Table = ({
               <tr>
                 <td colSpan={columns.length + (selectable ? 1 : 0)} className="empty-cell">
                   <div className="empty-state">
-                    {/* <Icons size="large" /> */}
                     <span>No data available</span>
                   </div>
                 </td>
@@ -179,7 +170,6 @@ const Table = ({
         </table>
       </div>
 
-      {/* Pagination */}
       {pagination && (
         <div className="table-pagination">
           <div className="pagination-info">
@@ -212,7 +202,7 @@ const Table = ({
   );
 };
 
-// Helper function to generate pagination numbers
+
 const generatePaginationNumbers = (currentPage, totalPages) => {
   const pages = [];
   const maxButtons = 5;

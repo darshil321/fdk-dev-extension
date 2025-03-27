@@ -1,222 +1,287 @@
 .create-bundle-container {
-  width: 100%;
-  background-color: #fafafa;
+    width: 100%;
+    background-color: #fafafa;
 }
 
 .empty-media {
-  cursor: pointer;
-  font-size: 16px;
-  color: var(--text-secondary);
+    cursor: pointer;
+    font-size: 16px;
+    color: var(--text-secondary);
 }
 
 .component-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  border-bottom: 1px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border-color);
 }
 .add-btn {
-  color: purple;
-  font-size: 16px;
+    color: purple;
+    font-size: 16px;
 }
 
 .bundle-header {
-  position: sticky;
-  top: 0;
-  background: #fff;
-  z-index: 10;
-  padding: 16px 24px;
-  border-bottom: 1px solid var(--border-color);
-  display: flex;
-  justify-content: space-between;
-  border-top-right-radius: 16px;
+    position: sticky;
+    top: 0;
+    background: #fff;
+    z-index: 10;
+    padding: 16px 24px;
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    justify-content: space-between;
+    border-top-right-radius: 16px;
 }
 
 .header-left {
-  display: flex;
-  align-items: center;
-  gap: 16px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
 }
 
 .header-left h2 {
-  margin: 0;
-  font-size: 24px;
-  font-weight: 600;
+    margin: 0;
+    font-size: 24px;
+    font-weight: 600;
 }
 
 .card {
-  background-color: #fff;
-  border-radius: 8px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  padding: 24px;
-  margin-bottom: 24px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    padding: 24px;
+    margin-bottom: 24px;
 }
 
 .card-title {
-  font-size: 18px;
-  font-weight: 600;
-  margin-top: 0;
-  margin-bottom: 16px;
-  color: #333;
+    font-size: 18px;
+    font-weight: 600;
+    margin-top: 0;
+    margin-bottom: 16px;
+    color: #333;
 }
 
 .subtitle {
-  opacity: 0.7;
-  font-size: 14px;
+    opacity: 0.7;
+    font-size: 14px;
 }
 
 .card-subtitle {
-  font-size: 14px;
-  color: var(--text-secondary);
-  margin: 16px 0;
+    font-size: 14px;
+    color: var(--text-secondary);
+    margin: 16px 0;
 }
 
 .form-full-w-grid {
-  display: grid;
-  grid-template-columns: repeat(1, 1fr);
-  gap: 24px;
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    gap: 24px;
 }
 
 .form-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 20px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
 }
 
 .input-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 20px;
-  grid-column: span 2;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    grid-column: span 2;
 }
 
 .shipping-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 16px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
 }
 
 .section-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 16px;
-  margin-top: 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    margin-top: 24px;
 }
 
 .add-media-btn {
-  font-weight: 500;
+    font-weight: 500;
 }
 
 .group-table table {
-  width: 100%;
-  border-collapse: collapse;
+    width: 100%;
+    border-collapse: collapse;
 }
 
 .group-table th,
 .group-table td {
-  padding: 12px 16px;
-  text-align: left;
-  border-bottom: 1px solid var(--border-color);
+    padding: 12px 16px;
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
 }
 
 .group-table th {
-  background-color: var(--background-light);
-  font-weight: 500;
-  font-size: 14px;
+    background-color: var(--background-light);
+    font-weight: 500;
+    font-size: 14px;
 }
 
 .group-table td {
-  font-size: 14px;
+    font-size: 14px;
 }
 
 .input-field {
-  margin-bottom: 12px;
+    margin-bottom: 12px;
 }
 
 .form-container-wrapper {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
 }
 
 .form-container {
-  display: flex;
-  margin-top: 24px;
-  gap: 24px;
-  flex-direction: column;
-  min-width: 85%;
-  align-items: center;
-  justify-content: center;
+    display: flex;
+    margin-top: 24px;
+    gap: 24px;
+    flex-direction: column;
+    min-width: 85%;
+    align-items: center;
+    justify-content: center;
 }
 
 .header-title {
-  font-size: 18px !important;
-  font-weight: 600;
-  margin: 0;
+    font-size: 18px !important;
+    font-weight: 600;
+    margin: 0;
 }
 .card-subtitle {
-  margin: 0;
+    margin: 0;
 }
 
 .price-input {
-  display: flex;
-  align-items: center;
-  gap: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
 .overview {
-  display: flex;
-  gap: 16px;
-  flex-direction: column;
+    display: flex;
+    gap: 16px;
+    flex-direction: column;
 }
 
 .add-highlight-btn {
-  display: flex;
-  align-items: center;
-  color: var(--primary-color);
-  font-size: 12px;
-  cursor: pointer;
-  padding: 0 !important;
+    display: flex;
+    align-items: center;
+    color: var(--primary-color);
+    font-size: 12px;
+    cursor: pointer;
+    padding: 0 !important;
 }
 .highlights-section {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .highlights-container {
-  margin-top: 12px;
-  margin-bottom: 12px;
+    margin-top: 12px;
+    margin-bottom: 12px;
 }
 
 .highlights-list {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
 }
 
 .empty-highlights {
-  color: #999;
-  font-style: italic;
-  padding: 10px 0;
+    color: #999;
+    font-style: italic;
+    padding: 10px 0;
 }
 .highlight-item-container {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-  width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    width: 100%;
 }
 
 .highlight-input {
-  display: flex;
+    display: flex;
 }
 
 .delete-highlight {
-  color: var(--text-secondary);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
+    color: var(--text-secondary);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
+
+.group-with-condition {
+    margin-bottom: 16px;
+}
+
+.highlighted-group {
+    border: 2px dashed #2563eb;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.add-group-dropdown {
+    margin-top: 16px;
+    padding: 16px;
+    border-top: 1px dashed #e5e7eb;
+    background-color: #f9fafb;
+    border-radius: 0 0 12px 12px;
+}
+
+.add-group-container {
+    margin-top: 16px;
+}
+
+.add-group-btn {
+    color: #2563eb;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 500;
+}
+
+.add-group-btn:hover {
+    text-decoration: underline;
+}
+
+.error-message {
+    background-color: #fee2e2;
+    color: #b91c1c;
+    padding: 12px 16px;
+    margin-bottom: 16px;
+    border-radius: 4px;
+    border-left: 4px solid #ef4444;
+}
+
+.condition-dropdown-wrapper {
+    margin: 12px 0;
+    display: flex;
+    justify-content: center;
+    position: relative;
+}
+
+.group-table-container + .condition-dropdown-container {
+    margin-top: -8px;
+    margin-bottom: 16px;
+}
+
+.condition-dropdown-container + .group-table-container {
+    margin-top: 16px;
+}
+
+.form-card.variant-secondary {
+    background-color: #f9fafb;
+    border: 1px solid #e5e7eb;
+    box-shadow: none;
 }

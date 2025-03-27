@@ -1,13 +1,12 @@
+import {
+    useGetBundlesQuery,
+} from "@/store/services/bundles";
 import { setIsCreating } from "@/store/slices/bundlesSlice";
 import { useDispatch, useSelector } from "react-redux";
 import BundlesList from "./BundleList/BundleList";
 import CreateBundle from "./CreateBundle/CreateBundle";
 import "./DynamicBundle.css";
 import EmptyState from "./EmptyState/EmptyState";
-import {
-  useGetBundlesQuery,
-  useGetGroupsQuery,
-} from "@/store/services/bundles";
 
 const DynamicBundle = ({ companyId, applicationId }) => {
   const dispatch = useDispatch();
@@ -24,19 +23,12 @@ const DynamicBundle = ({ companyId, applicationId }) => {
     },
   });
 
-  const { data: groups, error } = useGetGroupsQuery({
-    companyId,
-    applicationId,
-  });
-
   const bundles = bundlesData?.items || [];
 
-  // Show loading state
   if (isLoading) {
     return <div className="loading-container">Loading bundles...</div>;
   }
 
-  // Show empty state if no bundles and not creating
   if (bundles.length === 0 && !isCreating) {
     return (
       <EmptyState
@@ -47,7 +39,6 @@ const DynamicBundle = ({ companyId, applicationId }) => {
     );
   }
 
-  // Show create bundle form or bundles list
   return isCreating ? (
     <CreateBundle
       companyId={companyId}

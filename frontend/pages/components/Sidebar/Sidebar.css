@@ -1,32 +1,30 @@
 .sidebar {
-  /* width: 100px; */
-  /* border-right: 1px solid #e0e0e0; */
-  position: sticky;
-  top: 0;
+    position: sticky;
+    top: 0;
 }
 
 .tabs {
-  display: flex;
-  flex-direction: column;
-  border-radius: 24px !important;
+    display: flex;
+    flex-direction: column;
+    border-radius: 24px !important;
 }
 
 .tab {
-  padding: 20px 8px !important;
-  text-align: left;
-  border: none;
-  background: none;
-  cursor: pointer;
-  font-size: 10px;
-  background-color: #fafafa;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  gap: 4px;
+    padding: 20px 8px !important;
+    text-align: left;
+    border: none;
+    background: none;
+    cursor: pointer;
+    font-size: 10px;
+    background-color: #fafafa;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 4px;
 }
 
 .tab.active {
-  background-color: var(--background-color-primary) !important;
-  color: var(--primary-color) !important;
+    background-color: var(--background-color-primary) !important;
+    color: var(--primary-color) !important;
 }

@@ -1,35 +1,32 @@
-import React, { useState, useEffect } from "react";
-import { Button, DataTable, Dropdown } from "paul-fds-ui";
+import { Dropdown, Input } from "paul-fds-ui";
 import { Icons } from "paul-icons-react";
+import { useEffect, useState } from "react";
 
-import "./GroupTable.css";
 import {
-  useGetGroupByIdQuery,
-  useGetGroupProductsAddonsMutation,
+    useGetGroupByIdQuery,
+    useGetGroupProductsAddonsMutation,
 } from "@/store/services/bundles";
-import SvgIcon from "../../Icons/LeftArrow";
-import FormCard from "../../common/FormCard/FormCard";
 import InputField from "../../common/Form/Input/Input";
+import FormCard from "../../common/FormCard/FormCard";
+import "./GroupTable.css";
 
 const GroupTable = ({
   group,
-  onRemove,
   companyId,
   applicationId,
   onProductChange,
   products: initialProducts = [],
 }) => {
-  const [products, setProducts] = useState([]);
+  const [products, setProducts] = useState(initialProducts || []);
   const [loading, setLoading] = useState(true);
+  const [expandedProducts, setExpandedProducts] = useState({});
 
-  // Fetch group details to get products if not provided
-  const { data: groupData, isLoading: isGroupLoading } = useGetGroupByIdQuery(
+  const { data: groupData } = useGetGroupByIdQuery(
     { companyId, applicationId, groupId: group.value },
     { skip: !group.value || initialProducts.length > 0 }
   );
 
-  // Mutation to fetch add-ons for products
-  const [getAddOns, { isLoading: isAddOnsLoading }] =
+  const [getAddOns] =
     useGetGroupProductsAddonsMutation();
 
   useEffect(() => {
@@ -42,11 +39,9 @@ const GroupTable = ({
 
       if (groupData && groupData.products) {
         try {
-          // Extract item_uids from group products
           const itemUids = groupData.products.map((p) => p.item_uid);
 
           if (itemUids.length > 0) {
-            // Fetch add-ons for these products
             const addonsResult = await getAddOns({
               companyId,
               applicationId,
@@ -54,7 +49,6 @@ const GroupTable = ({
               itemUids,
             }).unwrap();
 
-            // Transform and set products with add-ons
             const productsWithAddons = addonsResult.items.map((item) => ({
               id: item.item_uid,
               item_uid: item.item_uid,
@@ -86,41 +80,28 @@ const GroupTable = ({
     group.value,
   ]);
 
-  // Handle quantity change
+  const toggleAddOns = (productId) => {
+    setExpandedProducts(prev => ({
+      ...prev,
+      [productId]: !prev[productId]
+    }));
+  };
+
   const handleQuantityChange = (productId, value) => {
-    const updatedProducts = products.map((product) => {
+    const updatedProducts = products.map(product => {
       if (product.id === productId || product.item_uid === productId) {
-        const updatedProduct = { ...product, quantity: parseInt(value) || 1 };
-        return updatedProduct;
+        return { ...product, quantity: parseInt(value) || 1 };
       }
       return product;
     });
 
     setProducts(updatedProducts);
-    onProductChange(group.value, updatedProducts);
+    onProductChange && onProductChange(group.value, updatedProducts);
   };
 
-  // Handle price change
-  const handlePriceChange = (productId, value) => {
-    const updatedProducts = products.map((product) => {
-      if (product.id === productId || product.item_uid === productId) {
-        const updatedProduct = { ...product, price: parseFloat(value) || 0 };
-        return updatedProduct;
-      }
-      return product;
-    });
-
-    setProducts(updatedProducts);
-    onProductChange(group.value, updatedProducts);
-  };
-
-  // if (loading || isGroupLoading || isAddOnsLoading) {
-  //   return <div className="group-table-loading">Loading group products...</div>;
-  // }
-  console.log("groupData", groupData);
 
   return (
-    <div className="">
+    <div className="group-table-container">
       <FormCard variant="secondary" style={{ padding: "0px" }}>
         <div className="group-table">
           <div className="group-table-header">
@@ -134,26 +115,35 @@ const GroupTable = ({
               <div key={product.id || product.item_uid} className="product-row">
                 <div className="product-info">
                   <img
-                    src={product.imageUrl}
+                    src={"/images/empty.png"}
                     alt={product.name}
                     className="product-image"
                   />
-                  <div className="product-name">{product.name}</div>
+                  <div className="product-details">
+                    <div className="product-name">{product.name}</div>
+                    <div className="product-size">Size: {product.size || "Regular"}</div>
+                    {product.addOns && product.addOns.length > 0 && (
+                      <div
+                        className="product-addons"
+                        onClick={() => toggleAddOns(product.id || product.item_uid)}
+                      >
+                        <span>{product.addOns.length} Add-Ons</span>
+                        <Icons
+                          name={expandedProducts[product.id || product.item_uid] ? "chevron-up" : "chevron-down"}
+                          size={14}
+                        />
+                      </div>
+                    )}
+                  </div>
                 </div>
 
-                <div className="product-qty">
-                  <InputField
+                <div className="quantity-column">
+                  <Input
                     type="number"
-                    value={product.quantity}
-                    onChange={(e) =>
-                      handleQuantityChange(
-                        product.id || product.item_uid,
-                        e.target.value
-                      )
-                    }
+                    value={product.quantity || 1}
+                    onChange={(e) => handleQuantityChange(product.id || product.item_uid, e.target.value)}
                     min="1"
                     className="quantity-input"
-                    style={{}}
                   />
                 </div>
 

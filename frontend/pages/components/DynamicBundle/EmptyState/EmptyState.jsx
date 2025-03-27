@@ -2,7 +2,6 @@ import React from "react";
 
 import "./EmptyState.css";
 import { Button } from "paul-fds-ui";
-import SvgIcon from "../../Icons/LeftArrow";
 
 const EmptyState = ({ onCreateClick }) => {
   return (
